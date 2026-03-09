@@ -1,0 +1,34 @@
+<!--
+  HEADER CODE INJECTION
+  - Hides Squarespace default header
+  - Removes section padding
+  - Fixes yellow date badge overlap on cards
+-->
+<style type="text/css">
+    /* Hide Squarespace's header only, keep our custom header */
+    header:not(.site-header) {
+      display: none !important;
+    }
+    section {
+      padding-top: 0 !important;
+    }
+    .Index-page-content,
+    .sqs-block-code,
+    .Index-page .Index-page-content,
+    [data-section-id] .Index-page-content {
+      padding-top: 0 !important;
+    }
+    .site-container {
+      margin-top: 0 !important;
+    }
+    /* Fix: prevent yellow date badge from covering card text */
+    .entry-header {
+      padding-top: 20px !important;
+    }
+    .entry-text {
+      padding-top: 24px !important;
+    }
+    .date-callout {
+      bottom: -24px !important;
+    }
+    </style>

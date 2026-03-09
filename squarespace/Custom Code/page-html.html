@@ -1,0 +1,287 @@
+<!--
+  Paste into Code block. Use HTML mode.
+  Add to HOME PAGE only. Uses hash routing: #about, #the-nitty-gritty, #roadmap, #admissions, #resources.
+  No separate pages needed.
+-->
+
+<!-- 1. NAV OVERLAY & SIDE TRAY -->
+<div class="nav-close-overlay" id="navOverlay"></div>
+
+<div id="sideTrayWrapper" class="sidetray-wrapper">
+  <a class="nav-toggle-close-label sidetray-close" id="navClose" href="#" aria-label="Close menu">
+    <svg class="Icon Icon--close close-icon" viewBox="0 0 18 18"><path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+  </a>
+  <div class="main-nav-wrapper">
+    <nav class="main-navigation">
+      <div class="nav-link--collection">
+        <a href="#about" data-page="about"><span>About</span></a>
+      </div>
+      <div class="nav-link--collection">
+        <a href="#the-nitty-gritty" data-page="the-nitty-gritty"><span>The Nitty-Gritty</span></a>
+      </div>
+      <div class="nav-link--collection">
+        <a href="#roadmap" data-page="roadmap"><span>Roadmap</span></a>
+      </div>
+      <div class="nav-link--collection">
+        <a href="#admissions" data-page="admissions"><span>Admissions</span></a>
+      </div>
+      <div class="nav-link--collection">
+        <a href="#resources" data-page="resources"><span>Resources</span></a>
+      </div>
+    </nav>
+    <div class="sidetray-social">
+      <a href="https://www.instagram.com/uciadmissions/" target="_blank" aria-label="Instagram" class="social-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@uciadmissions" target="_blank" aria-label="TikTok" class="social-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/uciadmissions/" target="_blank" aria-label="Facebook" class="social-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://twitter.com/uciadmissions" target="_blank" aria-label="Twitter" class="social-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+    <div class="sidetray-tagline">
+      <h3><strong>The Long Road to Medicine</strong></h3>
+    </div>
+  </div>
+</div>
+
+<!-- 2. SITE CONTAINER (header, search, blog, article, footer) -->
+<div id="site" class="site-container">
+  <header class="site-header">
+    <a class="nav-toggle-label" id="navToggle" href="#" aria-label="Menu">
+      <svg class="Icon Icon--hamburger nav-toggle-label-icon" viewBox="0 0 26 18">
+        <rect y="0" width="26" height="2" fill="currentColor"/>
+        <rect y="8" width="26" height="2" fill="currentColor"/>
+        <rect y="16" width="26" height="2" fill="currentColor"/>
+      </svg>
+    </a>
+    <div class="logo-wrapper">
+      <a href="#" class="logo-link" id="logoLink">
+        <span class="logo-text">Honest mentorship for future physicians</span>
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2"/>
+            <path d="M14 28V14c0-2 2-4 6-4s6 2 6 4v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M20 10v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M14 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+    <div class="header-right">
+      <nav class="header-nav">
+        <a href="#about" class="header-nav-link" data-page="about">About</a>
+        <a href="#the-nitty-gritty" class="header-nav-link" data-page="the-nitty-gritty">The Nitty-Gritty</a>
+        <a href="#roadmap" class="header-nav-link" data-page="roadmap">Roadmap</a>
+        <a href="#admissions" class="header-nav-link" data-page="admissions">Admissions</a>
+        <a href="#resources" class="header-nav-link" data-page="resources">Resources</a>
+      </nav>
+      <div class="header-special">
+      <a href="#" class="header-search" id="searchToggle" aria-label="Search">
+        <svg class="Icon Icon--search search-icon" viewBox="0 0 20 20" width="20" height="20">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M12 12l5 5" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </a>
+      <button type="button" class="header-search-close" id="searchClose" aria-label="Close search" style="display: none;">
+        <svg viewBox="0 0 18 18" width="24" height="24"><path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-panel" id="searchPanel">
+    <div class="search-panel-inner">
+      <form action="#" method="get" class="header-search-inner">
+        <input class="header-search-form-input" name="q" placeholder="Search posts..." type="text" spellcheck="false" id="searchInput">
+      </form>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <main class="site-page" id="mainContent">
+    <section class="about-page" id="aboutPage">
+      <div class="about-content">
+        <h1 class="about-title">About The Long Road to Medicine</h1>
+        <p class="about-lead">Honest mentorship for future physicians.</p>
+        
+        <h2 class="about-heading">Our Purpose</h2>
+        <p class="about-text">The Long Road to Medicine exists to demystify the premed journey. We believe every aspiring physician deserves honest, practical guidance—not polished success stories that gloss over the real challenges. Our mission is to share the nitty-gritty: the setbacks, the breakthroughs, and the lessons that only come from walking the path.</p>
+        <p class="about-text">We're here to answer the questions you're afraid to ask, to offer perspective when the road feels long, and to remind you that you're not alone on this journey.</p>
+        
+        <h2 class="about-heading">What We Cover</h2>
+        <p class="about-text">From research and clinical experience to applications, interviews, and gap years—we cover the full spectrum of the premed experience. Our content is organized by category so you can find exactly what you need, whether you're a freshman just starting out or a senior preparing to apply.</p>
+        
+        <h2 class="about-heading">Our Bloggers</h2>
+        <p class="about-text">Our team is made up of seasoned premed students, medical students, and practicing physicians who've been where you are. We come from different backgrounds and took different paths, but we share a commitment to paying forward the mentorship we received.</p>
+        <div class="about-bloggers">
+          <div class="about-blogger">
+            <strong class="about-blogger-name">Candid Premed</strong>
+            <p class="about-blogger-bio">A current premed student sharing honest lessons from research, clinical volunteering, and the day-to-day reality of balancing grades, experiences, and self-care.</p>
+          </div>
+          <div class="about-blogger">
+            <strong class="about-blogger-name">Dr. Jane Doe</strong>
+            <p class="about-blogger-bio">Research scientist and mentor who has guided dozens of undergraduates through their first lab experiences. She writes about finding the right lab, building relationships with PIs, and making the most of research.</p>
+          </div>
+          <div class="about-blogger">
+            <strong class="about-blogger-name">Dr. Sarah Chen</strong>
+            <p class="about-blogger-bio">Practicing physician and medical school admissions advisor. She offers practical advice on applications, school selection, interviews, and the mindset that helps students succeed.</p>
+          </div>
+        </div>
+        
+        <h2 class="about-heading">Get Started</h2>
+        <p class="about-text">Explore our guides by category in the navigation above, or browse all posts to find what you need. Have a question? Reach out—we're here to help.</p>
+      </div>
+    </section>
+    <section class="site-page--blog-list" id="blogPage">
+      <div class="blog-list blog-wrapper autocolumns-wrapper" id="blogList"></div>
+      <div class="load-more-wrapper">
+        <a class="load-more" href="#" id="loadMore">Load More</a>
+      </div> 
+    </section>
+  </main>
+
+  <article class="article-detail" id="articleDetail">
+    <button type="button" class="article-nav article-nav--prev" id="articlePrev" aria-label="Previous article">&lsaquo;</button>
+    <button type="button" class="article-nav article-nav--next" id="articleNext" aria-label="Next article">&rsaquo;</button>
+    <div class="article-header-image-wrapper">
+      <img class="article-header-image" id="articleImage" src="" alt="">
+      <time class="article-date-badge" id="articleDateBadge"></time>
+    </div>
+    <div class="article-content-wrapper">
+      <h1 class="article-title" id="articleTitle"></h1>
+      <p class="article-author" id="articleAuthor"></p>
+      <div class="article-body" id="articleBody"></div>
+      <div class="article-meta">
+        <p class="article-categories" id="articleCategories"></p>
+        <p class="article-tags" id="articleTags"></p>
+      </div>
+      <div class="article-share">
+        <a href="#" class="share-btn">f Facebook</a>
+        <a href="#" class="share-btn">Twitter</a>
+        <a href="#" class="share-btn">Pinterest</a>
+        <a href="#" class="share-btn">❤ 0 Likes</a>
+      </div>
+      <div class="article-author-bio" id="articleAuthorBio"></div>
+      <section class="related-posts">
+        <h2 class="related-posts-title">Related Posts</h2>
+        <div class="related-posts-grid" id="relatedPosts"></div>
+      </section>
+    </div>
+  </article>
+
+  <div id="footer-root"></div>
+</div>
+
+<!-- 3. SCRIPTS (menu summary, article bodies, main script) -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  function addSummaryToMenu() {
+    const menu = document.querySelector('.header-menu');
+    if (menu && !menu.querySelector('.menu-summary')) {
+      const nav = menu.querySelector('nav');
+      if (!nav) return;
+      const summary = document.createElement('div');
+      summary.className = 'menu-summary';
+      summary.innerHTML = '<p>Unfiltered Tips for Premeds is a peer-mentorship blog by seasoned students offering the nitty-gritty of premed life and research.</p>';
+      nav.appendChild(summary);
+    }
+  }
+  const observer = new MutationObserver(addSummaryToMenu);
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
+<script>
+const articleBodies = {
+  0: `<p>Starting in research felt overwhelming. Here's what I wish I'd known from day one.</p><h3>Reach out early</h3><p>Don't wait until your junior year. Professors appreciate students who show genuine interest.</p><p><strong>Takeaway:</strong> 3 things to ask in your first lab meeting.</p>`,
+  1: `<p>Dr. Jane Doe shares lessons from years of mentoring undergraduates in research.</p><h3>What makes a strong research student?</h3><p>Curiosity, persistence, and communication.</p>`,
+  2: `<p>Clinical volunteering taught me more about patient care than any textbook could.</p><h3>Finding the right opportunity</h3><p>Hospitals, free clinics, nursing homes—each offers different experiences.</p>`,
+  3: `<p>Dr. Sarah Chen shares advice on navigating the medical school application process.</p><h3>Start early</h3><p>The application cycle is long. Begin drafting in the winter before you apply.</p>`,
+  4: `<p>A gap year can strengthen your application—if you plan it well.</p><h3>Why take a gap year?</h3><p>More clinical hours, research experience, MCAT prep, or simply time to grow.</p>`,
+  5: `<p>Essential steps for every premed, from freshman to senior year.</p><h3>Freshman & Sophomore</h3><p>Focus on GPA. Explore interests. Shadow.</p>`,
+  6: `<p>Your personal statement is your chance to show who you are beyond the numbers.</p><h3>Structure</h3><p>Hook, narrative, reflection, connection to medicine.</p>`,
+  7: `<p>Medical school interviews come in many formats. Here's how to prepare.</p><h3>Traditional interviews</h3><p>Know your application. Prepare stories that demonstrate resilience.</p>`,
+  8: `<p>Mentorship can shape your entire premed journey.</p><h3>Where to look</h3><p>Professors, physicians you shadow, research PIs, advisors.</p>`,
+  9: `<p>Books and resources that shaped my understanding of medicine.</p><h3>Must-reads</h3><p>When Breath Becomes Air, The House of God, Being Mortal.</p>`
+};
+</script>
+<script>
+const authorBios = {"Candid Premed": "A premed student sharing honest lessons from the journey to medicine.","Dr. Jane Doe": "Research Scientist and mentor. Dr. Doe has guided dozens of undergraduates through their first lab experiences.","Dr. Sarah Chen": "Practicing physician and medical school admissions advisor."};
+const postsData = [
+  { date: "Mar 15", month: "Mar", day: "15", title: "Candid Lessons Learned", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "What I wish I knew starting in research, and how to avoid common pitfalls along the way.", image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 12", month: "Mar", day: "12", title: "Research Lab Insights", author: "Dr. Jane Doe", categories: ["The Nitty-Gritty", "Mentor Spotlight"], excerpt: "Lessons from lab mentors and real-world research experiences that shaped my path to medicine.", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 8", month: "Mar", day: "8", title: "Clinical Volunteering Experiences", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Hands-on learning in healthcare settings and what it taught me about patient care.", image: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 5", month: "Mar", day: "5", title: "Navigating Medical School Applications", author: "Dr. Sarah Chen", categories: ["The Nitty-Gritty", "Mentor Spotlight"], excerpt: "Advice from a practicing physician on applications and how to present your best self.", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 1", month: "Mar", day: "1", title: "Gap Year Planning", author: "Candid Premed", categories: ["Roadmap"], excerpt: "How to make the most of your gap year before medical school.", image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 25", month: "Feb", day: "25", title: "College Premed Checklist", author: "Candid Premed", categories: ["Roadmap"], excerpt: "Essential steps for every premed from freshman to senior year.", image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 20", month: "Feb", day: "20", title: "Personal Statement Tips", author: "Candid Premed", categories: ["Admissions"], excerpt: "What admissions committees look for and how to stand out.", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 15", month: "Feb", day: "15", title: "Interview Prep Strategies", author: "Candid Premed", categories: ["Admissions"], excerpt: "Prepare for MMI and traditional medical school interviews.", image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 10", month: "Feb", day: "10", title: "Finding Mentors", author: "Candid Premed", categories: ["Resources"], excerpt: "How to identify and approach potential mentors in medicine.", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 5", month: "Feb", day: "5", title: "Recommended Reading", author: "Candid Premed", categories: ["Resources"], excerpt: "Books and resources that shaped my premed journey.", image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 20", month: "Mar", day: "20", title: "First Lab Meeting Nerves", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "How I overcame anxiety before my first research lab meeting and what I actually learned.", image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 18", month: "Mar", day: "18", title: "Scribing vs Clinical Volunteering", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Comparing two common clinical experiences and which might be right for you.", image: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 14", month: "Mar", day: "14", title: "When Research Fails", author: "Dr. Jane Doe", categories: ["The Nitty-Gritty", "Mentor Spotlight"], excerpt: "Experiments don't always work. Here's how to handle setbacks and learn from them.", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 10", month: "Mar", day: "10", title: "Shadowing Etiquette", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Do's and don'ts when shadowing physicians—from the first email to the last thank-you.", image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 7", month: "Mar", day: "7", title: "Balancing Research and Grades", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "How I managed lab hours and coursework without burning out.", image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 3", month: "Mar", day: "3", title: "Cold Emailing Professors", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "A template that actually got me responses—and what to avoid.", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 28", month: "Feb", day: "28", title: "Choosing a Research Lab", author: "Dr. Jane Doe", categories: ["The Nitty-Gritty", "Mentor Spotlight"], excerpt: "What to look for beyond the project name when picking a lab.", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 22", month: "Feb", day: "22", title: "Hospital Volunteering Tips", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Making the most of limited hours in a busy hospital setting.", image: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 18", month: "Feb", day: "18", title: "Authorship and Lab Politics", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Navigating authorship conversations—before it gets awkward.", image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 12", month: "Feb", day: "12", title: "Free Clinic Experiences", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Why I chose a free clinic over a hospital—and what I learned.", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80", aspectRatio: "82%" },
+  { date: "Apr 3", month: "Apr", day: "3", title: "Freshman Year Survival Guide", author: "Candid Premed", categories: ["Roadmap"], excerpt: "What I wish I'd known before starting my first semester as a premed.", image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 30", month: "Mar", day: "30", title: "MCAT Prep Timeline", author: "Candid Premed", categories: ["Roadmap"], excerpt: "When to start, how long to study, and when to take the exam.", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 25", month: "Mar", day: "25", title: "Post-Bacc Programs Explained", author: "Dr. Sarah Chen", categories: ["Roadmap", "Mentor Spotlight"], excerpt: "When a post-bacc makes sense and how to choose one.", image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 22", month: "Mar", day: "22", title: "Sophomore Year Priorities", author: "Candid Premed", categories: ["Roadmap"], excerpt: "GPA, shadowing, or research? How to prioritize when you're spread thin.", image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 17", month: "Mar", day: "17", title: "Junior Year Crunch Time", author: "Candid Premed", categories: ["Roadmap"], excerpt: "MCAT, applications, and maintaining sanity—a survival guide.", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 11", month: "Mar", day: "11", title: "Scribe vs MA vs CNA", author: "Candid Premed", categories: ["Roadmap"], excerpt: "Comparing clinical gap year options and what each teaches you.", image: "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 6", month: "Mar", day: "6", title: "Building Your Narrative", author: "Dr. Sarah Chen", categories: ["Roadmap", "Mentor Spotlight"], excerpt: "How to connect your experiences into a coherent story for applications.", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 2", month: "Mar", day: "2", title: "When to Take the MCAT", author: "Candid Premed", categories: ["Roadmap"], excerpt: "Timing considerations for different application cycles.", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 27", month: "Feb", day: "27", title: "Senior Year Timeline", author: "Candid Premed", categories: ["Roadmap"], excerpt: "Month-by-month breakdown of the application year.", image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 23", month: "Feb", day: "23", title: "Research-Only Gap Years", author: "Candid Premed", categories: ["Roadmap"], excerpt: "When to go all-in on research and how to make it count.", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 19", month: "Feb", day: "19", title: "Choosing Medical Schools", author: "Dr. Sarah Chen", categories: ["Roadmap", "Admissions"], excerpt: "How to build a realistic school list based on your stats and goals.", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80", aspectRatio: "82%" },
+  { date: "Apr 5", month: "Apr", day: "5", title: "Secondary Essays That Stand Out", author: "Dr. Sarah Chen", categories: ["Admissions"], excerpt: "How to write secondaries that don't sound like everyone else's.", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80", aspectRatio: "82%" },
+  { date: "Apr 1", month: "Apr", day: "1", title: "AMCAS Timeline", author: "Candid Premed", categories: ["Admissions"], excerpt: "When to submit, when to wait, and what to avoid.", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 28", month: "Mar", day: "28", title: "Letters of Recommendation", author: "Candid Premed", categories: ["Admissions"], excerpt: "Who to ask, when to ask, and how to make it easy for them.", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 24", month: "Mar", day: "24", title: "MMI Practice Scenarios", author: "Candid Premed", categories: ["Admissions"], excerpt: "Sample ethical scenarios and how to structure your thinking.", image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 19", month: "Mar", day: "19", title: "Activity Descriptions", author: "Dr. Sarah Chen", categories: ["Admissions"], excerpt: "How to write 700 characters that actually say something.", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 16", month: "Mar", day: "16", title: "Interview Day Nerves", author: "Candid Premed", categories: ["Admissions"], excerpt: "What to expect and how to stay calm on interview day.", image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 13", month: "Mar", day: "13", title: "Waitlist Strategies", author: "Dr. Sarah Chen", categories: ["Admissions"], excerpt: "What to do when you're waitlisted—and what not to do.", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 9", month: "Mar", day: "9", title: "Reapplication Advice", author: "Candid Premed", categories: ["Admissions"], excerpt: "If you didn't get in this cycle, here's how to strengthen your next application.", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80", aspectRatio: "82%" },
+  { date: "Mar 4", month: "Mar", day: "4", title: "School-Specific Secondaries", author: "Candid Premed", categories: ["Admissions"], excerpt: "How to tailor your essays without burning out.", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 26", month: "Feb", day: "26", title: "Mock Interview Tips", author: "Candid Premed", categories: ["Admissions"], excerpt: "How to get the most out of practice interviews.", image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 21", month: "Feb", day: "21", title: "Casper and AAMC PREview", author: "Candid Premed", categories: ["Admissions"], excerpt: "What these tests are and how to prepare (briefly).", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 17", month: "Feb", day: "17", title: "Premed Podcasts", author: "Candid Premed", categories: ["Resources"], excerpt: "My favorite podcasts for learning and staying motivated.", image: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 14", month: "Feb", day: "14", title: "Anki for MCAT", author: "Candid Premed", categories: ["Resources"], excerpt: "How I used Anki effectively without drowning in cards.", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 11", month: "Feb", day: "11", title: "Study Groups That Work", author: "Candid Premed", categories: ["Resources"], excerpt: "When to study alone vs with others—and how to find good groups.", image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 8", month: "Feb", day: "8", title: "Medical School Vlogs", author: "Candid Premed", categories: ["Resources"], excerpt: "YouTube channels that gave me a realistic view of med school.", image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 4", month: "Feb", day: "4", title: "Premed Reddit", author: "Candid Premed", categories: ["Resources"], excerpt: "How to use Reddit without spiraling—a survival guide.", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80", aspectRatio: "82%" },
+  { date: "Feb 1", month: "Feb", day: "1", title: "Office Hours", author: "Candid Premed", categories: ["Resources"], excerpt: "How to make the most of professor office hours (without being annoying).", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80", aspectRatio: "82%" },
+  { date: "Jan 28", month: "Jan", day: "28", title: "Premed Advisors", author: "Dr. Sarah Chen", categories: ["Resources"], excerpt: "When to listen to your advisor—and when to get a second opinion.", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80", aspectRatio: "82%" },
+  { date: "Jan 25", month: "Jan", day: "25", title: "Medical School Rankings", author: "Candid Premed", categories: ["Resources"], excerpt: "What rankings actually mean and when to ignore them.", image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=800&q=80", aspectRatio: "82%" },
+  { date: "Jan 22", month: "Jan", day: "22", title: "SDN and Student Doctor", author: "Candid Premed", categories: ["Resources"], excerpt: "How to use forums without losing your mind.", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80", aspectRatio: "82%" },
+  { date: "Jan 18", month: "Jan", day: "18", title: "MCAT Prep Resources", author: "Candid Premed", categories: ["Resources"], excerpt: "Books, courses, and free resources—what's worth the money.", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80", aspectRatio: "82%" },
+  { date: "Jan 15", month: "Jan", day: "15", title: "Networking Events", author: "Candid Premed", categories: ["Resources"], excerpt: "How to approach premed conferences and info sessions.", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80", aspectRatio: "82%" },
+  { date: "Jan 12", month: "Jan", day: "12", title: "Summer Programs", author: "Dr. Jane Doe", categories: ["Resources"], excerpt: "REU, SHPEP, and other summer opportunities—what to apply for.", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80", aspectRatio: "82%" },
+  { date: "Jan 8", month: "Jan", day: "8", title: "Self-Care for Premeds", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Burnout is real. Here's how I learned to take breaks without guilt.", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", aspectRatio: "82%" }
+];
+const POSTS_PER_PAGE = 9;
+let visibleCount = POSTS_PER_PAGE;
+const CATEGORY_ORDER = ['The Nitty-Gritty', 'Roadmap', 'Admissions', 'Resources'];
+const CATEGORY_TAGLINES = {'The Nitty-Gritty': 'Inside my journey','Roadmap': 'The path forward','Admissions': 'Make it Count','Resources': 'Sharpen your toolbox'};
+const SLUG_TO_CATEGORY = {'the-nitty-gritty':'The Nitty-Gritty','roadmap':'Roadmap','admissions':'Admissions','resources':'Resources'};
+function getCurrentPage(){const h=(window.location.hash||'').replace(/^#/,'');if(!h||h==='about')return 'about';const m=h.match(/^article-(\d+)$/);if(m){const post=postsData[parseInt(m[1],10)];if(post){const cat=getPrimaryCategory(post);if(cat){const slug=Object.keys(SLUG_TO_CATEGORY).find(k=>SLUG_TO_CATEGORY[k]===cat);if(slug)return slug;}}}return SLUG_TO_CATEGORY[h]?h:'about';}
+function getPrimaryCategory(post){const main=post.categories.find(c=>CATEGORY_ORDER.includes(c));return main||post.categories[0];}
+function renderPost(post,index){const categoriesFiltered=post.categories.filter(c=>c!=='Mentor Spotlight');const categoriesHtml=categoriesFiltered.map(cat=>`<a href="#" class="blog-category">${cat}</a>`).join('<span class="blog-meta-delimiter">, </span>');const excerptHtml=post.excerpt?`<div class="entry-excerpt"><p>${post.excerpt}</p></div>`:'';const mentorBadge=post.categories.includes('Mentor Spotlight')?'<span class="mentor-spotlight-badge">Mentor Spotlight</span>':'';return `<article class="entry entry--list has-main-image autocolumns-item-wrapper" data-index="${index}" data-post-id="${index}"><div class="thumbnail-title-wrapper"><div class="excerpt-thumb"><a href="#" class="excerpt-image content-fill autocolumns-image-wrapper card-link" style="padding-bottom: ${post.aspectRatio}" data-index="${index}"><img src="${post.image}" alt="${post.title}"><div class="thumb-overlay"></div><time class="dt-published date-callout" datetime=""><div class="date-wrapper"><span class="month">${post.month} </span><span class="day">${post.day}</span></div></time></a></div></div><div class="entry-text"><header class="entry-header">${mentorBadge}<h2 class="entry-title entry-title--list"><a href="#" class="u-url card-link" data-index="${index}"><time class="dt-published date-highlight">${post.date} </time>${post.title}</a></h2></header><div class="entry-content"><div class="blog-meta-item blog-meta-author"><a href="#" class="blog-author-name">${post.author}</a></div><div class="blog-meta-item blog-categories">${categoriesHtml}</div>${excerptHtml}</div></div></article>`;}
+function attachCardHandlers(container){if(!container)return;container.querySelectorAll('.card-link').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();openArticle(parseInt(link.dataset.index,10));});});}
+function renderPosts(appendOnly,categoryFilter){const container=document.getElementById('blogList');const loadMore=document.getElementById('loadMore');if(!container)return;let data=postsData;if(categoryFilter){data=postsData.filter(p=>getPrimaryCategory(p)===categoryFilter);}if(appendOnly){const prevCount=visibleCount-POSTS_PER_PAGE;const newPosts=data.slice(prevCount,visibleCount);const fragment=document.createDocumentFragment();newPosts.forEach((post,i)=>{const idx=postsData.indexOf(post);const div=document.createElement('div');div.innerHTML=renderPost(post,idx);fragment.appendChild(div.firstElementChild);});container.appendChild(fragment);attachCardHandlers(container);}else{const postsToShow=data.slice(0,visibleCount);const grouped={};postsToShow.forEach((post,i)=>{const cat=getPrimaryCategory(post);if(!grouped[cat])grouped[cat]=[];grouped[cat].push({post,index:postsData.indexOf(post)});});let html='';(categoryFilter?[categoryFilter]:CATEGORY_ORDER).forEach(cat=>{if(grouped[cat]&&grouped[cat].length>0){const tagline=CATEGORY_TAGLINES[cat]?`<p class="category-tagline">${CATEGORY_TAGLINES[cat]}</p>`:'';html+=`<section class="category-section" data-category="${cat}"><h2 class="category-heading">${cat}</h2>${tagline}<div class="category-posts">`;grouped[cat].forEach(({post,index})=>{html+=renderPost(post,index);});html+=`</div></section>`;}});container.innerHTML=html;attachCardHandlers(container);}if(loadMore){if(visibleCount>=data.length)loadMore.style.display='none';else loadMore.style.display='inline-block';}}
+function openArticle(index){const post=postsData[index];if(!post)return;requestAnimationFrame(function(){requestAnimationFrame(function(){window.scrollTo({top:0,behavior:'smooth'});});});window.location.hash='article-'+index;document.body.classList.add('article-open');document.body.classList.remove('search-open');document.getElementById('searchPanel')?.classList.remove('search-panel--open');document.getElementById('searchToggle').style.display='';document.getElementById('searchClose').style.display='none';document.getElementById('articleImage').src=post.image;document.getElementById('articleImage').alt=post.title;document.getElementById('articleDateBadge').innerHTML=`<span class="month">${post.month}</span><span class="day">${post.day}</span>`;document.getElementById('articleTitle').textContent=post.title;document.getElementById('articleAuthor').textContent=post.author.toUpperCase();const bodyContent=(typeof articleBodies!=='undefined'&&articleBodies[index])||post.body||(post.excerpt?`<p>${post.excerpt}</p>`:'');document.getElementById('articleBody').innerHTML=bodyContent;document.getElementById('articleCategories').textContent=post.categories.join(', ').toUpperCase();document.getElementById('articleTags').textContent=post.categories.join(', ').toLowerCase();const bio=authorBios[post.author];const initial=post.author.charAt(0);document.getElementById('articleAuthorBio').innerHTML=bio?`<div class="author-avatar-initial">${initial}</div><p class="author-name">${post.author}</p><p class="author-bio">${bio}</p>`:'';const related=postsData.map((p,i)=>({post:p,i})).filter(({i})=>i!==index).sort(()=>Math.random()-0.5).slice(0,3);document.getElementById('relatedPosts').innerHTML=related.map(({post:p,i})=>{const categoriesHtml=p.categories.map(cat=>`<a href="#" class="blog-category">${cat}</a>`).join('<span class="blog-meta-delimiter">, </span>');const excerptHtml=p.excerpt?`<div class="entry-excerpt"><p>${p.excerpt}</p></div>`:'';return `<article class="entry entry--list has-main-image related-post-entry" data-index="${i}"><div class="thumbnail-title-wrapper"><div class="excerpt-thumb"><a href="#" class="excerpt-image content-fill autocolumns-image-wrapper card-link" style="padding-bottom: ${p.aspectRatio}" data-index="${i}"><img src="${p.image}" alt="${p.title}"><div class="thumb-overlay"></div><time class="dt-published date-callout" datetime=""><div class="date-wrapper"><span class="month">${p.month} </span><span class="day">${p.day}</span></div></time></a></div></div><div class="entry-text"><header class="entry-header"><h2 class="entry-title entry-title--list"><a href="#" class="u-url card-link" data-index="${i}"><time class="dt-published date-highlight">${p.date} </time>${p.title}</a></h2></header><div class="entry-content"><div class="blog-meta-item blog-meta-author"><a href="#" class="blog-author-name">${p.author}</a></div><div class="blog-meta-item blog-categories">${categoriesHtml}</div>${excerptHtml}</div></div></article>`;}).join('');document.getElementById('relatedPosts').querySelectorAll('.card-link').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();openArticle(parseInt(link.dataset.index,10));});});currentArticleIndex=index;document.getElementById('articlePrev').style.visibility=index>0?'visible':'hidden';document.getElementById('articleNext').style.visibility=index<postsData.length-1?'visible':'hidden';}
+function closeArticle(){document.body.classList.remove('article-open');const h=window.location.hash;if(h&&h.startsWith('#article-')){history.replaceState(null,'',window.location.pathname+window.location.search);showPage();}}
+let currentArticleIndex=0;
+function showPage(){document.body.classList.remove('sidetray-open');var h=(window.location.hash||'').replace(/^#/,'');var isArticle=h&&h.startsWith('article-');if(!isArticle){document.body.classList.remove('article-open');window.scrollTo({top:0,behavior:'smooth'});}const page=getCurrentPage();document.querySelectorAll('.header-nav-link,.main-navigation .nav-link--collection a').forEach(function(l){l.classList.remove('is-active');if(l.getAttribute('data-page')===page||(page==='about'&&l.getAttribute('href')==='#about'))l.classList.add('is-active');});const aboutPage=document.getElementById('aboutPage');const blogPage=document.getElementById('blogPage');if(aboutPage&&blogPage){if(page==='about'){aboutPage.style.display='block';blogPage.style.display='none';}else{aboutPage.style.display='none';blogPage.style.display='block';const cat=SLUG_TO_CATEGORY[page];visibleCount=POSTS_PER_PAGE;renderPosts(false,cat);}}else{renderPosts();}}
+function init(){showPage();window.addEventListener('hashchange',showPage);const loadMore=document.getElementById('loadMore');if(loadMore)loadMore.addEventListener('click',e=>{e.preventDefault();visibleCount+=POSTS_PER_PAGE;const p=getCurrentPage();renderPosts(false,p!=='about'?SLUG_TO_CATEGORY[p]:null);});const navToggle=document.getElementById('navToggle');const navClose=document.getElementById('navClose');const navOverlay=document.getElementById('navOverlay');function openNav(){document.body.classList.add('sidetray-open');}function closeNav(){document.body.classList.remove('sidetray-open');}navToggle?.addEventListener('click',e=>{e.preventDefault();openNav();});navClose?.addEventListener('click',e=>{e.preventDefault();closeNav();});navOverlay?.addEventListener('click',closeNav);document.getElementById('logoLink')?.addEventListener('click',e=>{e.preventDefault();if(document.body.classList.contains('article-open'))closeArticle();window.location.hash='about';showPage();});const searchToggle=document.getElementById('searchToggle');const searchPanel=document.getElementById('searchPanel');const searchClose=document.getElementById('searchClose');const searchInput=document.getElementById('searchInput');const searchResults=document.getElementById('searchResults');function filterPosts(query){const q=(query||'').trim().toLowerCase();if(!q)return postsData;return postsData.filter(post=>{const title=(post.title||'').toLowerCase();const excerpt=(post.excerpt||'').toLowerCase();const author=(post.author||'').toLowerCase();const categories=(post.categories||[]).join(' ').toLowerCase();return title.includes(q)||excerpt.includes(q)||author.includes(q)||categories.includes(q);});}function renderSearchResults(query){const filtered=filterPosts(query);if(!query.trim()){searchResults.innerHTML='';searchResults.classList.remove('search-results--has-query');return;}searchResults.classList.add('search-results--has-query');if(filtered.length===0){searchResults.innerHTML='<p class="search-no-results">No posts match your search.</p>';return;}searchResults.innerHTML=filtered.map((post,i)=>{const index=postsData.indexOf(post);const categoriesHtml=post.categories.filter(c=>c!=='Mentor Spotlight').map(cat=>`<a href="#" class="blog-category">${cat}</a>`).join('<span class="blog-meta-delimiter">, </span>');return `<article class="search-result-card entry entry--list" data-index="${index}"><a href="#" class="search-result-link card-link" data-index="${index}"><div class="search-result-content"><h3 class="search-result-title">${post.title}</h3><p class="search-result-meta">${post.author} · ${post.categories.filter(c=>c!=='Mentor Spotlight').join(', ')}</p>${post.excerpt?`<p class="search-result-excerpt">${post.excerpt}</p>`:''}</div></a></article>`;}).join('');searchResults.querySelectorAll('.card-link').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();openArticle(parseInt(link.dataset.index,10));document.body.classList.remove('search-open');searchPanel?.classList.remove('search-panel--open');searchToggle.style.display='';searchClose.style.display='none';searchInput.value='';searchResults.innerHTML='';});});}searchToggle?.addEventListener('click',e=>{e.preventDefault();document.body.classList.add('search-open');searchPanel?.classList.add('search-panel--open');searchToggle.style.display='none';searchClose.style.display='flex';searchInput.value='';searchResults.innerHTML='';searchInput?.focus();});searchClose?.addEventListener('click',e=>{e.preventDefault();document.body.classList.remove('search-open');searchPanel?.classList.remove('search-panel--open');searchToggle.style.display='';searchClose.style.display='none';searchInput.value='';searchResults.innerHTML='';});searchInput?.addEventListener('input',e=>renderSearchResults(e.target.value));searchInput?.addEventListener('keydown',e=>{if(e.key==='Escape')searchClose?.click();});searchPanel?.querySelector('form')?.addEventListener('submit',e=>e.preventDefault());document.getElementById('articlePrev')?.addEventListener('click',()=>{if(currentArticleIndex>0)openArticle(currentArticleIndex-1);});document.getElementById('articleNext')?.addEventListener('click',()=>{if(currentArticleIndex<postsData.length-1)openArticle(currentArticleIndex+1);});const hash=window.location.hash;if(hash&&hash.startsWith('#article-')){const idx=parseInt(hash.replace('#article-',''),10);if(!isNaN(idx)&&idx>=0&&idx<postsData.length)openArticle(idx);}}
+document.addEventListener('DOMContentLoaded',init);
+</script>
