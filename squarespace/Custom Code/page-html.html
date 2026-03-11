@@ -206,11 +206,12 @@ const articleBodies = {
   6: `<p>Your personal statement is your chance to show who you are beyond the numbers.</p><h3>Structure</h3><p>Hook, narrative, reflection, connection to medicine.</p>`,
   7: `<p>Medical school interviews come in many formats. Here's how to prepare.</p><h3>Traditional interviews</h3><p>Know your application. Prepare stories that demonstrate resilience.</p>`,
   8: `<p>Mentorship can shape your entire premed journey.</p><h3>Where to look</h3><p>Professors, physicians you shadow, research PIs, advisors.</p>`,
-  9: `<p>Books and resources that shaped my understanding of medicine.</p><h3>Must-reads</h3><p>When Breath Becomes Air, The House of God, Being Mortal.</p>`
+  9: `<p>Books and resources that shaped my understanding of medicine.</p><h3>Must-reads</h3><p>When Breath Becomes Air, The House of God, Being Mortal.</p>`,
+  55: `<p>Your opening paragraph here. Write as you normally would.</p><p>Section heading or second paragraph. Use blank lines to separate paragraphs.</p><p>Takeaway: Your key point or lesson learned.</p>`
 };
 </script>
 <script>
-const authorBios = {"Candid Premed": "A premed student sharing honest lessons from the journey to medicine.","Dr. Jane Doe": "Research Scientist and mentor. Dr. Doe has guided dozens of undergraduates through their first lab experiences.","Dr. Sarah Chen": "Practicing physician and medical school admissions advisor."};
+const authorBios = {"Candid Premed": "A premed student sharing honest lessons from the journey to medicine.","Dr. Jane Doe": "Research Scientist and mentor. Dr. Doe has guided dozens of undergraduates through their first lab experiences.","Dr. Sarah Chen": "Practicing physician and medical school admissions advisor.","Jed & Prince": "We build stuff"};
 const postsData = [
   { date: "Mar 15", month: "Mar", day: "15", title: "Candid Lessons Learned", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "What I wish I knew starting in research, and how to avoid common pitfalls along the way.", image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&q=80", aspectRatio: "82%" },
   { date: "Mar 12", month: "Mar", day: "12", title: "Research Lab Insights", author: "Dr. Jane Doe", categories: ["The Nitty-Gritty", "Mentor Spotlight"], excerpt: "Lessons from lab mentors and real-world research experiences that shaped my path to medicine.", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80", aspectRatio: "82%" },
@@ -266,8 +267,8 @@ const postsData = [
   { date: "Jan 18", month: "Jan", day: "18", title: "MCAT Prep Resources", author: "Candid Premed", categories: ["Resources"], excerpt: "Books, courses, and free resources—what's worth the money.", image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&q=80", aspectRatio: "82%" },
   { date: "Jan 15", month: "Jan", day: "15", title: "Networking Events", author: "Candid Premed", categories: ["Resources"], excerpt: "How to approach premed conferences and info sessions.", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80", aspectRatio: "82%" },
   { date: "Jan 12", month: "Jan", day: "12", title: "Summer Programs", author: "Dr. Jane Doe", categories: ["Resources"], excerpt: "REU, SHPEP, and other summer opportunities—what to apply for.", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80", aspectRatio: "82%" },
-  { date: "Jan 8", month: "Jan", day: "8", title: "Self-Care for Premeds", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Burnout is real. Here's how I learned to take breaks without guilt.", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", aspectRatio: "82%" }
-];
+  { date: "Jan 8", month: "Jan", day: "8", title: "Self-Care for Premeds", author: "Candid Premed", categories: ["The Nitty-Gritty"], excerpt: "Burnout is real. Here's how I learned to take breaks without guilt.", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", aspectRatio: "82%" },
+    { date: "Mar 10", month: "Mar", day: "10", title: "Testing non programmer", author: "Jed & Prince", categories: ["Roadmap"], excerpt: "JUst testing to see if this works", image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80", aspectRatio: "82%" }];
 const POSTS_PER_PAGE = 9;
 let visibleCount = POSTS_PER_PAGE;
 const CATEGORY_ORDER = ['The Nitty-Gritty', 'Roadmap', 'Admissions', 'Resources'];

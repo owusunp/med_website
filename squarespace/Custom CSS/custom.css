@@ -563,7 +563,7 @@
   }
   .about-blogger {
     padding: 24px;
-    background: var(--bg-light);
+    background: var(--bg-white);
     border-radius: 8px;
     text-align: left;
   }
