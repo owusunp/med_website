@@ -3,6 +3,7 @@
   - Hides Squarespace default header
   - Removes section padding
   - Fixes yellow date badge overlap on cards
+  - Removes left/right gap on mobile for Code block content
 -->
 <style type="text/css">
     /* Hide Squarespace's header only, keep our custom header */
@@ -20,6 +21,41 @@
     }
     .site-container {
       margin-top: 0 !important;
+    }
+    /* Mobile: remove left/right gap - target Fluid Engine wrappers (content-wrapper, content, fluid-engine) */
+    @media (max-width: 768px) {
+      .Index-page,
+      .Index-page-content,
+      .Index-page .Index-page-content,
+      [data-section-id],
+      [data-section-id] .Index-page-content,
+      .content-wrapper,
+      .content,
+      .content-inner,
+      .fluid-engine,
+      .fe-block,
+      .sqs-code-block,
+      .Index-page-content .content-wrapper,
+      .Index-page-content .content,
+      .Index-page-content .row,
+      .Index-page-content .col,
+      .row .col,
+      .sqs-layout,
+      .sqs-layout .sqs-row,
+      .sqs-layout .sqs-block,
+      .sqs-block,
+      .sqs-block-code,
+      .sqs-block-code .sqs-block-content,
+      .sqs-block-content,
+      section[data-section-id],
+      .page-section {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
     }
     /* Fix: prevent yellow date badge from covering card text */
     .entry-header {
