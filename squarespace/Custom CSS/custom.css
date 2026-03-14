@@ -706,30 +706,28 @@
     margin: 0 0 16px;
   }
   
-  /* Masonry layout: cards flow in columns, 24px gap between all cards */
+  /* Grid layout: cards fill left-to-right then next row so Load More appends sequentially */
   .category-posts {
-    column-count: 3;
-    column-gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
 
   @media (max-width: 600px) {
     .category-posts {
-      column-count: 2;
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (max-width: 480px) {
     .category-posts {
-      column-count: 1;
-      column-gap: 16px;
+      grid-template-columns: 1fr;
+      gap: 16px;
     }
   }
   
   .entry.autocolumns-item-wrapper,
   .category-posts .entry {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    margin-bottom: 24px;
     width: 100%;
     min-width: 0;
   }
@@ -737,7 +735,7 @@
   @media (max-width: 480px) {
     .category-posts .entry,
     .entry.autocolumns-item-wrapper {
-      margin-bottom: 16px;
+      margin-bottom: 0;
     }
   }
   
@@ -1194,6 +1192,17 @@
   
   .article-body a:hover {
     text-decoration: underline;
+  }
+
+  .article-body-image {
+    margin: 1.25em 0;
+  }
+
+  .article-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
   }
   
   .article-meta {

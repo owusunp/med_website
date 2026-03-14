@@ -10,6 +10,7 @@ from tkinter import ttk, messagebox, scrolledtext, filedialog
 import os
 import re
 import base64
+from html import escape as html_escape
 
 # Path to page-html.html (relative to this script)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -43,24 +44,45 @@ def escape_js_template_literal(text):
     return text.replace("\\", "\\\\").replace("`", "\\`").replace("${", "\\${")
 
 
+# Standalone line that is only an image URL (common extensions, optional query string)
+IMAGE_URL_RE = re.compile(
+    r"^\s*(https?://\S+\.(?:png|jpe?g|gif|webp)(?:\?\S*)?)\s*$",
+    re.IGNORECASE,
+)
+
+
 def plain_text_to_html(text):
-    """Convert plain text to HTML. Paragraphs (separated by blank lines) become <p> tags."""
+    """Convert plain text to HTML. Blank lines separate paragraphs.
+    Any line that is only an image URL becomes an <img> (works after text too)."""
     text = text.strip()
     if not text:
         return ""
     # If it already looks like HTML, return as-is
     if text.strip().startswith("<"):
         return text
-    # Split into paragraphs (double newline or more)
-    paragraphs = re.split(r"\n\s*\n", text)
+    lines = text.split("\n")
     html_parts = []
-    for p in paragraphs:
-        p = p.strip()
-        if not p:
-            continue
-        # Single newlines within paragraph -> <br>
-        p = p.replace("\n", "<br>")
+    paragraph_lines = []
+
+    def flush_paragraph():
+        if not paragraph_lines:
+            return
+        p = "<br>".join(paragraph_lines)
         html_parts.append(f"<p>{p}</p>")
+        paragraph_lines.clear()
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            flush_paragraph()
+            continue
+        if IMAGE_URL_RE.match(stripped):
+            flush_paragraph()
+            url_attr = html_escape(stripped, quote=True)
+            html_parts.append(f'<p class="article-body-image"><img src="{url_attr}" alt=""></p>')
+            continue
+        paragraph_lines.append(line.strip())
+    flush_paragraph()
     return "".join(html_parts)
 
 
@@ -202,8 +224,9 @@ def submit():
         messagebox.showinfo(
             "Success",
             "Post added successfully!\n\n"
-            "The page-html.html file has been updated.\n"
-            "Copy the code from that file and paste it into your Squarespace Code block.",
+            "Updated file:\n" + PAGE_HTML_PATH + "\n\n"
+            "• If page-html.html is open in your editor: reload it (e.g. use 'Revert File' or accept 'File changed on disk') so you see the new post. Don't save without reloading or you'll overwrite the changes.\n\n"
+            "• Copy the code from that file and paste it into your Squarespace Code block.",
         )
         root.quit()
     else:
