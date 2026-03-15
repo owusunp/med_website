@@ -386,6 +386,10 @@
   body.article-open .article-detail {
     display: block;
   }
+  /* So prev/next arrows in gutter aren't clipped */
+  body.article-open {
+    overflow-x: visible !important;
+  }
   
   .header-search-close {
     display: flex;
@@ -722,7 +726,7 @@
   @media (max-width: 480px) {
     .category-posts {
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 38px;
     }
   }
   
@@ -1055,42 +1059,46 @@
   .article-detail {
     display: none;
     position: relative;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 24px 80px;
+    padding: 0 16px 80px;
   }
   
+  /* Prev/next arrows: fixed near viewport edges */
   .article-nav {
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
-    background: var(--bg-white);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    font-size: 24px;
-    color: var(--text-light);
+    width: 52px;
+    height: 52px;
+    left: 12px;
+    right: auto;
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    color: var(--text-dark);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 50;
-    transition: background 0.2s, color 0.2s;
-  }
-  
-  .article-nav:hover {
-    background: var(--uci-blue);
-    color: var(--bg-white);
-    border-color: var(--uci-blue);
+    transition: color 0.2s, opacity 0.2s;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 1px 2px rgba(255, 255, 255, 0.8);
   }
   
   .article-nav--prev {
-    left: 24px;
+    left: 12px;
+    right: auto;
   }
   
   .article-nav--next {
-    right: 24px;
+    left: auto;
+    right: 12px;
+  }
+  
+  .article-nav:hover {
+    color: var(--uci-blue);
+    opacity: 0.9;
   }
   
   .article-header-image-wrapper {
@@ -1250,7 +1258,12 @@
     border-color: var(--uci-blue);
     color: var(--uci-blue);
   }
-  
+
+  .share-btn.is-liked {
+    border-color: var(--uci-blue);
+    color: var(--uci-blue);
+  }
+
   .article-author-bio {
     text-align: center;
     padding: 32px 0;
@@ -1284,11 +1297,14 @@
     font-size: 15px;
     color: var(--text-gray);
     line-height: 1.6;
-    max-width: 400px;
+    max-width: 100%;
     margin: 0 auto;
   }
 
 /* 10. RELATED POSTS */
+  .related-posts {
+    max-width: 100%;
+  }
   .related-posts-title {
     font-size: 22px;
     font-weight: 700;
@@ -1335,8 +1351,10 @@
     }
     .article-nav--prev {
       left: max(12px, env(safe-area-inset-left));
+      right: auto;
     }
     .article-nav--next {
+      left: auto;
       right: max(12px, env(safe-area-inset-right));
     }
   }
@@ -1345,49 +1363,74 @@
   /* (No media query hiding hamburger on desktop – keep it like "Unfiltered Life at UCI" reference) */
   @media (max-width: 768px) {
     .article-nav {
-      width: 44px;
-      height: 44px;
-      font-size: 20px;
-      left: 12px;
-      min-width: 44px;
-      min-height: 44px;
+      width: 52px;
+      height: 52px;
+      font-size: 28px;
+      min-width: 52px;
+      min-height: 52px;
     }
-  
+    .article-nav--prev {
+      left: max(8px, env(safe-area-inset-left));
+      right: auto;
+    }
     .article-nav--next {
-      right: 12px;
+      left: auto;
+      right: max(8px, env(safe-area-inset-right));
     }
   
+    /* Mobile only: article card */
+    .article-detail {
+      max-width: 100%;
+      width: 100%;
+      padding: 24px 16px 80px;
+      box-sizing: border-box;
+    }
     .article-content-wrapper {
-      padding: 40px 24px 32px;
+      padding: 40px 10px 32px;
+      max-width: 100%;
+    }
+    .article-body {
+      max-width: 100%;
+      margin: 0 0 32px;
+      font-size: 16px;
+    }
+    .article-body h3 {
+      font-size: 1.1em;
+    }
+    .article-author-bio .author-bio {
+      max-width: 100%;
+    }
+    .related-posts,
+    .related-posts-grid {
+      max-width: 100%;
     }
   
     .article-title {
       font-size: 1.75em;
     }
-  
-    .article-body {
-      font-size: 16px;
-    }
-  
-    .article-body h3 {
-      font-size: 1.1em;
-    }
   }
   @media (max-width: 480px) {
+    .article-detail {
+      padding: 20px 12px 80px;
+    }
     .article-content-wrapper {
-      padding: 32px 16px 24px;
+      padding: 32px 8px 24px;
     }
     .article-title {
       font-size: 1.5em;
     }
     .article-nav {
-      width: 40px;
-      height: 40px;
-      font-size: 18px;
-      left: 8px;
+      width: 48px;
+      height: 48px;
+      font-size: 24px;
+    }
+    .article-nav--prev {
+      left: max(8px, env(safe-area-inset-left));
+      right: auto;
     }
     .article-nav--next {
-      right: 8px;
+      left: auto;
+      right: max(8px, env(safe-area-inset-right));
     }
   }
 
@@ -1396,6 +1439,10 @@
     /* Allow negative margin on blog cards to show (body overflow clips it) */
     body {
       overflow-x: visible !important;
+    }
+    /* Menu open: overlay same as menu background so it merges with screen (no grey shading) */
+    .nav-close-overlay {
+      background: var(--bg-white);
     }
     /* Side tray full-screen on phone so nothing hangs off the right */
     .sidetray-wrapper {
@@ -1422,10 +1469,10 @@
     .site-header {
       padding-left: 10px;
       padding-right: 10px;
+      padding-bottom: 16px;
     }
     .site-page {
-      padding-left: 10px;
-      padding-right: 10px;
+      padding: 32px 10px 60px;
       box-sizing: border-box;
     }
     /* Blog cards 100% width on mobile (Fluid Engine wrappers fixed in header injection) */
@@ -1574,9 +1621,10 @@
       max-width: 140px;
     }
     .site-header {
-      padding: 16px 8px 12px;
+      padding: 16px 8px 16px;
     }
     .site-page {
+      padding-top: 32px;
       padding-left: 8px;
       padding-right: 8px;
     }
