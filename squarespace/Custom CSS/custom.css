@@ -1954,3 +1954,8 @@ h1.Index-page-title {
   padding-bottom: 0 !important;
 }  
 
+/* Hidden native newsletter bridge block (used only for footer subscribe backend) */
+.sqs-block-newsletter {
+  display: none !important;
+}
+

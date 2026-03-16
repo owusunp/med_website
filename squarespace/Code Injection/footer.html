@@ -18,6 +18,7 @@
       <input type="email" name="email" placeholder="Email" class="footer-subscribe-input">
       <button type="submit" class="footer-subscribe-btn">Subscribe</button>
     </form>
+    <p class="footer-subscribe-status" id="footerSubscribeStatus" aria-live="polite" style="margin-top:10px;font-size:13px;color:#6b6b6b;"></p>
   </div>
   <h3 class="footer-follow">Follow Us</h3>
   <nav class="footer-social social-icons-circle-knockout">
@@ -34,6 +35,106 @@
   function renderFooter(containerId) {
     const container = document.getElementById(containerId || 'footer-root');
     if (container) container.innerHTML = footerTemplate;
+    wireFooterSubscribeBridge();
+  }
+
+  function getNativeSquarespaceNewsletterForm() {
+    return document.querySelector(
+      'form.newsletter-form, .sqs-block-newsletter form, form[data-form-type="newsletter"], .sqs-block-form form'
+    );
+  }
+
+  function setStatus(message, isError) {
+    const statusEl = document.getElementById('footerSubscribeStatus');
+    if (!statusEl) return;
+    statusEl.textContent = message || '';
+    statusEl.style.color = isError ? '#b00020' : '#6b6b6b';
+  }
+
+  function setFieldValue(input, value) {
+    if (!input) return;
+    input.value = value || '';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  function submitViaNativeForm(nativeForm, email, name) {
+    // Fill native newsletter fields (support common Squarespace field names/selectors).
+    const emailInput =
+      nativeForm.querySelector('input[type="email"]') ||
+      nativeForm.querySelector('input[name="email"]') ||
+      nativeForm.querySelector('input[name*="email" i]');
+    const nameInput =
+      nativeForm.querySelector('input[name="name"]') ||
+      nativeForm.querySelector('input[name="first_name"]') ||
+      nativeForm.querySelector('input[type="text"]');
+
+    setFieldValue(emailInput, email);
+    if (name) setFieldValue(nameInput, name);
+
+    // Submit in hidden iframe to avoid page navigation while still using native backend flow.
+    let iframe = document.getElementById('newsletterBridgeFrame');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id = 'newsletterBridgeFrame';
+      iframe.name = 'newsletterBridgeFrame';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+
+    const oldTarget = nativeForm.getAttribute('target');
+    nativeForm.setAttribute('target', 'newsletterBridgeFrame');
+
+    const submitBtn =
+      nativeForm.querySelector('button[type="submit"]') ||
+      nativeForm.querySelector('input[type="submit"]');
+
+    if (typeof nativeForm.requestSubmit === 'function') {
+      nativeForm.requestSubmit(submitBtn || undefined);
+    } else if (submitBtn && typeof submitBtn.click === 'function') {
+      submitBtn.click();
+    } else {
+      nativeForm.submit();
+    }
+
+    if (oldTarget) nativeForm.setAttribute('target', oldTarget);
+    else nativeForm.removeAttribute('target');
+  }
+
+  function wireFooterSubscribeBridge() {
+    const form = document.querySelector('.footer-subscribe-form');
+    if (!form || form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email = form.querySelector('input[name="email"]')?.value?.trim();
+      const name = form.querySelector('input[name="name"]')?.value?.trim();
+      if (!email) {
+        setStatus('Please enter your email first.', true);
+        return;
+      }
+
+      const nativeForm = getNativeSquarespaceNewsletterForm();
+      if (!nativeForm) {
+        setStatus('Add one Squarespace Newsletter Block (it can be hidden) and this footer form will auto-connect.', true);
+        return;
+      }
+
+      const submitBtn = form.querySelector('.footer-subscribe-btn');
+      if (submitBtn) submitBtn.disabled = true;
+      setStatus('Subscribing...', false);
+
+      try {
+        submitViaNativeForm(nativeForm, email, name);
+        form.reset();
+        setStatus('Thanks! You are subscribed.', false);
+      } catch (err) {
+        setStatus('Could not subscribe right now. Please try again.', true);
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    });
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => renderFooter());
