@@ -4,6 +4,21 @@
   No separate pages needed.
 -->
 <style type="text/css">
+  /* Article header image only: full viewport width - make it bigger */
+  #articleHeaderThumb {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    padding-left: 18px;
+    padding-right: 18px;
+    box-sizing: border-box;
+  }
+  @media (max-width: 480px) {
+    #articleHeaderThumb {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
   /* Mobile: remove left gap - works with header injection overrides */
   @media (max-width: 768px) {
     #site,
@@ -175,9 +190,12 @@
   <article class="article-detail" id="articleDetail">
     <button type="button" class="article-nav article-nav--prev" id="articlePrev" aria-label="Previous article">&lsaquo;</button>
     <button type="button" class="article-nav article-nav--next" id="articleNext" aria-label="Next article">&rsaquo;</button>
-    <div class="article-header-image-wrapper">
-      <img class="article-header-image" id="articleImage" src="" alt="">
-      <time class="article-date-badge" id="articleDateBadge"></time>
+    <div class="excerpt-thumb" id="articleHeaderThumb">
+      <div class="excerpt-image content-fill autocolumns-image-wrapper" id="articleExcerptImage" style="padding-bottom: 82%">
+        <img id="articleImage" src="" alt="">
+        <div class="thumb-overlay"></div>
+        <time class="article-date-badge" id="articleDateBadge"></time>
+      </div>
     </div>
     <div class="article-gallery" id="articleGallery" aria-hidden="true"></div>
     <div class="article-content-wrapper">
@@ -192,12 +210,13 @@
         <a href="#" class="share-btn" id="articleLikeBtn" role="button">❤ 0 Likes</a>
       </div>
       <div class="article-author-bio" id="articleAuthorBio"></div>
-      <section class="related-posts">
-        <h2 class="related-posts-title">Related Posts</h2>
-        <div class="related-posts-grid" id="relatedPosts"></div>
-      </section>
     </div>
   </article>
+
+  <section class="site-page--blog-list article-related-posts">
+    <h2 class="related-posts-title">Related Posts</h2>
+    <div class="blog-list blog-wrapper home-posts category-posts" id="relatedPosts"></div>
+  </section>
 
   <div id="footer-root"></div>
 </div>
@@ -219,6 +238,100 @@ document.addEventListener("DOMContentLoaded", function () {
   const observer = new MutationObserver(addSummaryToMenu);
   observer.observe(document.body, { childList: true, subtree: true });
 });
+</script>
+<script>
+(function(){
+  var prefersReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var supportsFinePointer=window.matchMedia('(pointer: fine)').matches;
+  var revealObserver=null;
+
+  function setupRevealObserver(){
+    if(prefersReduced||revealObserver)return;
+    revealObserver=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+  }
+
+  function attachReveal(root){
+    if(prefersReduced)return;
+    setupRevealObserver();
+    root.querySelectorAll('.reveal-on-scroll').forEach(function(el){
+      revealObserver.observe(el);
+    });
+  }
+
+  function attachRipples(root){
+    var selectors='.load-more,.share-btn,.nav-toggle-label,.header-search,.header-search-close,.folder-toggle,.social-icon,.footer-social a';
+    root.querySelectorAll(selectors).forEach(function(el){
+      if(el.dataset.rippleReady==='1')return;
+      el.dataset.rippleReady='1';
+      el.classList.add('ripple-target');
+      el.addEventListener('pointerdown',function(e){
+        var rect=el.getBoundingClientRect();
+        var ripple=document.createElement('span');
+        ripple.className='tap-ripple';
+        var size=Math.max(rect.width,rect.height)*1.6;
+        ripple.style.width=size+'px';
+        ripple.style.height=size+'px';
+        ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+        ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+        el.appendChild(ripple);
+        ripple.addEventListener('animationend',function(){ripple.remove();},{once:true});
+      });
+    });
+  }
+
+  function attachCardTilt(root){
+    root.querySelectorAll('.entry--list').forEach(function(card){
+      if(card.dataset.interactiveReady==='1')return;
+      card.dataset.interactiveReady='1';
+      card.classList.add('card-interactive','reveal-on-scroll');
+      if(prefersReduced||!supportsFinePointer)return;
+      var raf=0,rx=0,ry=0;
+      function paint(){
+        raf=0;
+        card.style.transform='perspective(900px) rotateX('+ry+'deg) rotateY('+rx+'deg) translateY(-4px)';
+      }
+      card.addEventListener('pointermove',function(e){
+        var r=card.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width;
+        var py=(e.clientY-r.top)/r.height;
+        rx=(px-0.5)*4.2;
+        ry=(0.5-py)*4.2;
+        if(!raf)raf=requestAnimationFrame(paint);
+      });
+      card.addEventListener('pointerleave',function(){
+        rx=0;ry=0;
+        card.style.transform='';
+      });
+    });
+  }
+
+  function runInteractionPass(root){
+    attachRipples(root);
+    attachCardTilt(root);
+    var hero=document.getElementById('articleHeaderThumb');
+    if(hero&&!hero.classList.contains('reveal-on-scroll'))hero.classList.add('reveal-on-scroll');
+    var relatedTitle=document.querySelector('.related-posts-title');
+    if(relatedTitle&&!relatedTitle.classList.contains('reveal-on-scroll'))relatedTitle.classList.add('reveal-on-scroll');
+    attachReveal(document);
+  }
+
+  document.addEventListener('DOMContentLoaded',function(){
+    runInteractionPass(document);
+    ['blogList','relatedPosts','articleDetail','sideTrayWrapper'].forEach(function(id){
+      var node=document.getElementById(id);
+      if(!node)return;
+      var mo=new MutationObserver(function(){runInteractionPass(node);});
+      mo.observe(node,{childList:true,subtree:true});
+    });
+  });
+})();
 </script>
 <script>
 const articleBodies = {
@@ -308,17 +421,126 @@ const CATEGORY_TAGLINES = {'The Nitty-Gritty': 'Inside my journey','Roadmap': 'T
 const SLUG_TO_CATEGORY = {'the-nitty-gritty':'The Nitty-Gritty','roadmap':'Roadmap','admissions':'Admissions','resources':'Resources'};
 function getCurrentPage(){const h=(window.location.hash||'').replace(/^#/,'');if(!h||h==='home')return 'home';if(h==='about')return 'about';const m=h.match(/^article-(\d+)$/);if(m){const post=postsData[parseInt(m[1],10)];if(post){const cat=getPrimaryCategory(post);if(cat){const slug=Object.keys(SLUG_TO_CATEGORY).find(k=>SLUG_TO_CATEGORY[k]===cat);if(slug)return slug;}}}return SLUG_TO_CATEGORY[h]?h:'home';}
 function getPrimaryCategory(post){const main=post.categories.find(c=>CATEGORY_ORDER.includes(c));return main||post.categories[0];}
+function tokenizeText(text){return (text||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(Boolean);}
+function toTf(tokens){var tf={};tokens.forEach(function(t){tf[t]=(tf[t]||0)+1;});return tf;}
+function cosineSimilarity(tfA,tfB){var dot=0,normA=0,normB=0;for(var k in tfA){var a=tfA[k];normA+=a*a;if(tfB[k])dot+=a*tfB[k];}for(var j in tfB){var b=tfB[j];normB+=b*b;}if(!normA||!normB)return 0;return dot/(Math.sqrt(normA)*Math.sqrt(normB));}
+var relatedPrepared=false;
+var postBodyTfCache=[];
+var postMetaTfCache=[];
+var postCategoryTfCache=[];
+var relatedPostsCache={};
+function stripHtml(text){return String(text||'').replace(/<[^>]*>/g,' ');}
+function buildPostBodyTf(post,index){var body=((typeof articleBodies!=='undefined'&&articleBodies[index])||post.body||'');return toTf(tokenizeText(stripHtml(body)));}
+function buildPostMetaTf(post){var categories=(post.categories||[]).join(' ');var text=[post.title||'',post.excerpt||'',post.author||'',categories].join(' ');return toTf(tokenizeText(text));}
+function buildCategoryTf(post){return toTf(tokenizeText((post.categories||[]).join(' ')));}
+function prepareRelatedModel(){if(relatedPrepared)return;postBodyTfCache=postsData.map(function(post,i){return buildPostBodyTf(post,i);});postMetaTfCache=postsData.map(function(post){return buildPostMetaTf(post);});postCategoryTfCache=postsData.map(function(post){return buildCategoryTf(post);});relatedPrepared=true;}
+function scorePostsByIndex(baseIndex,otherIndex){var postA=postsData[baseIndex],postB=postsData[otherIndex];var bodyScore=cosineSimilarity(postBodyTfCache[baseIndex],postBodyTfCache[otherIndex]);var metaScore=cosineSimilarity(postMetaTfCache[baseIndex],postMetaTfCache[otherIndex]);var categoryScore=cosineSimilarity(postCategoryTfCache[baseIndex],postCategoryTfCache[otherIndex]);var authorBonus=(postA.author&&postA.author===postB.author)?0.03:0;return (0.8*bodyScore)+(0.15*metaScore)+(0.05*categoryScore)+authorBonus;}
+function getRelatedPosts(index,maxCount){prepareRelatedModel();var cacheKey=index+'-'+maxCount;if(relatedPostsCache[cacheKey])return relatedPostsCache[cacheKey];var related=postsData.map(function(p,i){return{post:p,i:i,score:i===index?-1:scorePostsByIndex(index,i)};}).filter(function(x){return x.i!==index;}).sort(function(a,b){if(b.score!==a.score)return b.score-a.score;return a.i-b.i;}).slice(0,maxCount).map(function(x){return{post:x.post,i:x.i};});relatedPostsCache[cacheKey]=related;return related;}
 function renderPost(post,index){const categoriesFiltered=post.categories.filter(c=>c!=='Mentor Spotlight');const categoriesHtml=categoriesFiltered.map(cat=>`<a href="#" class="blog-category">${cat}</a>`).join('<span class="blog-meta-delimiter">, </span>');const excerptHtml=post.excerpt?`<div class="entry-excerpt"><p>${post.excerpt}</p></div>`:'';const mentorBadge=post.categories.includes('Mentor Spotlight')?'<span class="mentor-spotlight-badge">Mentor Spotlight</span>':'';return `<article class="entry entry--list has-main-image autocolumns-item-wrapper" data-index="${index}" data-post-id="${index}"><div class="thumbnail-title-wrapper"><div class="excerpt-thumb"><a href="#" class="excerpt-image content-fill autocolumns-image-wrapper card-link" style="padding-bottom: ${post.aspectRatio}" data-index="${index}"><img src="${(post.images&&post.images[0])||post.image}" alt="${post.title}"><div class="thumb-overlay"></div><time class="dt-published date-callout" datetime=""><div class="date-wrapper"><span class="month">${post.month} </span><span class="day">${post.day}</span></div></time></a></div></div><div class="entry-text"><header class="entry-header">${mentorBadge}<h2 class="entry-title entry-title--list"><a href="#" class="u-url card-link" data-index="${index}"><time class="dt-published date-highlight">${post.date} </time>${post.title}</a></h2></header><div class="entry-content"><div class="blog-meta-item blog-meta-author"><a href="#" class="blog-author-name">${post.author}</a></div><div class="blog-meta-item blog-categories">${categoriesHtml}</div>${excerptHtml}</div></div></article>`;}
 function attachCardHandlers(container){if(!container)return;container.querySelectorAll('.card-link').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();openArticle(parseInt(link.dataset.index,10));});});}
-function renderPosts(appendOnly,categoryFilter){const container=document.getElementById('blogList');const loadMore=document.getElementById('loadMore');if(!container)return;let data=postsData;if(categoryFilter){data=postsData.filter(p=>getPrimaryCategory(p)===categoryFilter);}if(appendOnly){const prevCount=visibleCount-POSTS_PER_PAGE;const newPosts=data.slice(prevCount,visibleCount);if(newPosts.length===0){if(loadMore)loadMore.style.display='none';return;}const fragment=document.createDocumentFragment();newPosts.forEach((post)=>{const idx=postsData.indexOf(post);const div=document.createElement('div');div.innerHTML=renderPost(post,idx);fragment.appendChild(div.firstElementChild);});var grid=categoryFilter?container.querySelector('.category-posts'):container;if(grid){attachCardHandlers(fragment);grid.appendChild(fragment);}}else if(!categoryFilter){container.className='blog-list blog-wrapper home-posts category-posts';const postsToShow=data.slice(0,visibleCount);container.innerHTML=postsToShow.map(function(post){return renderPost(post,postsData.indexOf(post));}).join('');attachCardHandlers(container);}else{container.className='blog-list blog-wrapper autocolumns-wrapper';const postsToShow=data.slice(0,visibleCount);const cat=categoryFilter;const tagline=CATEGORY_TAGLINES[cat]?`<p class="category-tagline">${CATEGORY_TAGLINES[cat]}</p>`:'';const cardsHtml=postsToShow.map(function(post){return renderPost(post,postsData.indexOf(post));}).join('');container.innerHTML=`<section class="category-section" data-category="${cat}"><h2 class="category-heading">${cat}</h2>${tagline}<div class="category-posts">${cardsHtml}</div></section>`;attachCardHandlers(container);}if(loadMore){if(visibleCount>=data.length)loadMore.style.display='none';else loadMore.style.display='inline-block';}}
-function openArticle(index){const post=postsData[index];if(!post)return;requestAnimationFrame(function(){requestAnimationFrame(function(){window.scrollTo({top:0,behavior:'smooth'});});});window.location.hash='article-'+index;document.body.classList.add('article-open');document.body.classList.remove('search-open');document.getElementById('searchPanel')?.classList.remove('search-panel--open');document.getElementById('searchToggle').style.display='';document.getElementById('searchClose').style.display='none';var imgs=(post.images&&post.images.length)?post.images:(post.image?[post.image]:[]);var heroImg=document.getElementById('articleImage');heroImg.src=imgs[0]||'';heroImg.alt=post.title;var gallery=document.getElementById('articleGallery');if(imgs.length>1){gallery.innerHTML='';gallery.style.display='flex';gallery.setAttribute('aria-hidden','false');imgs.forEach(function(src){var btn=document.createElement('button');btn.type='button';btn.className='article-gallery-thumb';btn.dataset.src=src;var img=document.createElement('img');img.src=src;img.alt='';btn.appendChild(img);gallery.appendChild(btn);});gallery.querySelectorAll('.article-gallery-thumb').forEach(function(btn){btn.addEventListener('click',function(){heroImg.src=btn.dataset.src;gallery.querySelectorAll('.article-gallery-thumb').forEach(function(b){b.classList.remove('is-active');});btn.classList.add('is-active');});});var firstThumb=gallery.querySelector('.article-gallery-thumb');if(firstThumb)firstThumb.classList.add('is-active');}else{gallery.innerHTML='';gallery.style.display='none';gallery.setAttribute('aria-hidden','true');}document.getElementById('articleDateBadge').innerHTML=`<span class="month">${post.month}</span><span class="day">${post.day}</span>`;document.getElementById('articleTitle').textContent=post.title;document.getElementById('articleAuthor').textContent=post.author.toUpperCase();const bodyContent=(typeof articleBodies!=='undefined'&&articleBodies[index])||post.body||(post.excerpt?`<p>${post.excerpt}</p>`:'');document.getElementById('articleBody').innerHTML=bodyContent;document.getElementById('articleCategories').textContent=post.categories.join(', ').toUpperCase();document.getElementById('articleTags').textContent=post.categories.join(', ').toLowerCase();const bio=authorBios[post.author];const initial=post.author.charAt(0);document.getElementById('articleAuthorBio').innerHTML=bio?`<div class="author-avatar-initial">${initial}</div><p class="author-name">${post.author}</p><p class="author-bio">${bio}</p>`:'';const related=postsData.map((p,i)=>({post:p,i})).filter(({i})=>i!==index).sort(()=>Math.random()-0.5).slice(0,3);document.getElementById('relatedPosts').innerHTML=related.map(({post:p,i})=>{const categoriesHtml=p.categories.map(cat=>`<a href="#" class="blog-category">${cat}</a>`).join('<span class="blog-meta-delimiter">, </span>');const excerptHtml=p.excerpt?`<div class="entry-excerpt"><p>${p.excerpt}</p></div>`:'';return `<article class="entry entry--list has-main-image related-post-entry" data-index="${i}"><div class="thumbnail-title-wrapper"><div class="excerpt-thumb"><a href="#" class="excerpt-image content-fill autocolumns-image-wrapper card-link" style="padding-bottom: ${p.aspectRatio}" data-index="${i}"><img src="${(p.images&&p.images[0])||p.image}" alt="${p.title}"><div class="thumb-overlay"></div><time class="dt-published date-callout" datetime=""><div class="date-wrapper"><span class="month">${p.month} </span><span class="day">${p.day}</span></div></time></a></div></div><div class="entry-text"><header class="entry-header"><h2 class="entry-title entry-title--list"><a href="#" class="u-url card-link" data-index="${i}"><time class="dt-published date-highlight">${p.date} </time>${p.title}</a></h2></header><div class="entry-content"><div class="blog-meta-item blog-meta-author"><a href="#" class="blog-author-name">${p.author}</a></div><div class="blog-meta-item blog-categories">${categoriesHtml}</div>${excerptHtml}</div></div></article>`;}).join('');document.getElementById('relatedPosts').querySelectorAll('.card-link').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();openArticle(parseInt(link.dataset.index,10));});});currentArticleIndex=index;document.getElementById('articlePrev').style.visibility=index>0?'visible':'hidden';document.getElementById('articleNext').style.visibility=index<postsData.length-1?'visible':'hidden';updateLikeButton(index);}
+function renderPosts(appendOnly,categoryFilter){const container=document.getElementById('blogList');const loadMore=document.getElementById('loadMore');if(!container)return;let data=postsData;if(categoryFilter){data=postsData.filter(p=>getPrimaryCategory(p)===categoryFilter);}if(appendOnly){const prevCount=visibleCount-POSTS_PER_PAGE;const newPosts=data.slice(prevCount,visibleCount);if(newPosts.length===0){if(loadMore)loadMore.style.display='none';return;}const fragment=document.createDocumentFragment();let enterIndex=0;newPosts.forEach((post)=>{const idx=postsData.indexOf(post);const div=document.createElement('div');div.innerHTML=renderPost(post,idx);const card=div.firstElementChild;if(card){card.classList.add('card-enter');card.style.animationDelay=(enterIndex*60)+'ms';enterIndex+=1;fragment.appendChild(card);}});var grid=categoryFilter?container.querySelector('.category-posts'):container;if(grid){attachCardHandlers(fragment);grid.appendChild(fragment);setTimeout(function(){grid.querySelectorAll('.card-enter').forEach(function(el){el.classList.remove('card-enter');el.style.animationDelay='';});},700);}}else if(!categoryFilter){container.className='blog-list blog-wrapper home-posts category-posts';const postsToShow=data.slice(0,visibleCount);container.innerHTML=postsToShow.map(function(post){return renderPost(post,postsData.indexOf(post));}).join('');attachCardHandlers(container);}else{container.className='blog-list blog-wrapper autocolumns-wrapper';const postsToShow=data.slice(0,visibleCount);const cat=categoryFilter;const tagline=CATEGORY_TAGLINES[cat]?`<p class="category-tagline">${CATEGORY_TAGLINES[cat]}</p>`:'';const cardsHtml=postsToShow.map(function(post){return renderPost(post,postsData.indexOf(post));}).join('');container.innerHTML=`<section class="category-section" data-category="${cat}"><h2 class="category-heading">${cat}</h2>${tagline}<div class="category-posts">${cardsHtml}</div></section>`;attachCardHandlers(container);}if(loadMore){if(visibleCount>=data.length)loadMore.style.display='none';else loadMore.style.display='inline-block';}}
+function openArticle(index){const post=postsData[index];if(!post)return;requestAnimationFrame(function(){requestAnimationFrame(function(){window.scrollTo({top:0,behavior:'smooth'});});});window.location.hash='article-'+index;document.body.classList.add('article-open');document.body.classList.remove('search-open');document.getElementById('searchPanel')?.classList.remove('search-panel--open');document.getElementById('searchToggle').style.display='';document.getElementById('searchClose').style.display='none';var imgs=(post.images&&post.images.length)?post.images:(post.image?[post.image]:[]);var heroImg=document.getElementById('articleImage');heroImg.src=imgs[0]||'';heroImg.alt=post.title;var articleExcerpt=document.getElementById('articleExcerptImage');if(articleExcerpt){var desktopRatio='62%';var mobileRatio=post.aspectRatio||'82%';articleExcerpt.style.paddingBottom=(window.innerWidth>768)?desktopRatio:mobileRatio;}var gallery=document.getElementById('articleGallery');if(imgs.length>1){gallery.innerHTML='';gallery.style.display='flex';gallery.setAttribute('aria-hidden','false');imgs.forEach(function(src){var btn=document.createElement('button');btn.type='button';btn.className='article-gallery-thumb';btn.dataset.src=src;var img=document.createElement('img');img.src=src;img.alt='';btn.appendChild(img);gallery.appendChild(btn);});gallery.querySelectorAll('.article-gallery-thumb').forEach(function(btn){btn.addEventListener('click',function(){heroImg.src=btn.dataset.src;gallery.querySelectorAll('.article-gallery-thumb').forEach(function(b){b.classList.remove('is-active');});btn.classList.add('is-active');});});var firstThumb=gallery.querySelector('.article-gallery-thumb');if(firstThumb)firstThumb.classList.add('is-active');}else{gallery.innerHTML='';gallery.style.display='none';gallery.setAttribute('aria-hidden','true');}document.getElementById('articleDateBadge').innerHTML=`<span class="month">${post.month}</span><span class="day">${post.day}</span>`;document.getElementById('articleTitle').textContent=post.title;document.getElementById('articleAuthor').textContent=post.author.toUpperCase();const bodyContent=(typeof articleBodies!=='undefined'&&articleBodies[index])||post.body||(post.excerpt?`<p>${post.excerpt}</p>`:'');document.getElementById('articleBody').innerHTML=bodyContent;document.getElementById('articleCategories').textContent=post.categories.join(', ').toUpperCase();document.getElementById('articleTags').textContent=post.categories.join(', ').toLowerCase();const bio=authorBios[post.author];const initial=post.author.charAt(0);document.getElementById('articleAuthorBio').innerHTML=bio?`<div class="author-avatar-initial">${initial}</div><p class="author-name">${post.author}</p><p class="author-bio">${bio}</p>`:'';const related=getRelatedPosts(index,3);document.getElementById('relatedPosts').innerHTML=related.map(({post:p,i})=>{const categoriesHtml=p.categories.map(cat=>`<a href="#" class="blog-category">${cat}</a>`).join('<span class="blog-meta-delimiter">, </span>');const excerptHtml=p.excerpt?`<div class="entry-excerpt"><p>${p.excerpt}</p></div>`:'';return `<article class="entry entry--list has-main-image related-post-entry" data-index="${i}"><div class="thumbnail-title-wrapper"><div class="excerpt-thumb"><a href="#" class="excerpt-image content-fill autocolumns-image-wrapper card-link" style="padding-bottom: ${p.aspectRatio}" data-index="${i}"><img src="${(p.images&&p.images[0])||p.image}" alt="${p.title}"><div class="thumb-overlay"></div><time class="dt-published date-callout" datetime=""><div class="date-wrapper"><span class="month">${p.month} </span><span class="day">${p.day}</span></div></time></a></div></div><div class="entry-text"><header class="entry-header"><h2 class="entry-title entry-title--list"><a href="#" class="u-url card-link" data-index="${i}"><time class="dt-published date-highlight">${p.date} </time>${p.title}</a></h2></header><div class="entry-content"><div class="blog-meta-item blog-meta-author"><a href="#" class="blog-author-name">${p.author}</a></div><div class="blog-meta-item blog-categories">${categoriesHtml}</div>${excerptHtml}</div></div></article>`;}).join('');document.getElementById('relatedPosts').querySelectorAll('.card-link').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();openArticle(parseInt(link.dataset.index,10));});});currentArticleIndex=index;document.getElementById('articlePrev').style.visibility=index>0?'visible':'hidden';document.getElementById('articleNext').style.visibility=index<postsData.length-1?'visible':'hidden';updateLikeButton(index);}
 function closeArticle(){document.body.classList.remove('article-open');const h=window.location.hash;if(h&&h.startsWith('#article-')){history.replaceState(null,'',window.location.pathname+window.location.search);showPage();}}
 let currentArticleIndex=0;
 var LIKES_KEY='med_blog_likes';
 function getLikedSet(){try{return new Set(JSON.parse(localStorage.getItem(LIKES_KEY)||'[]'));}catch(e){return new Set();}}
-function setLiked(index,liked){var s=getLikedSet();if(liked)s.add(index);else s.delete(index);localStorage.setItem(LIKES_KEY,JSON.stringify([...s]));}
-function updateLikeButton(index){var btn=document.getElementById('articleLikeBtn');if(!btn)return;var liked=getLikedSet().has(index);btn.textContent=liked?'❤ 1 Like':'❤ 0 Likes';btn.classList.toggle('is-liked',liked);}
+var LIKE_NAMESPACE='chiefpipettor-long-road';
+var LIKE_API='https://api.countapi.xyz';
+var likeCountCache={};
+var likeCountPending={};
+function likeKey(index){return 'post-'+index;}
+function setLiked(index,liked){var s=getLikedSet();if(!liked||s.has(index)){localStorage.setItem(LIKES_KEY,JSON.stringify([...s]));return;}s.add(index);localStorage.setItem(LIKES_KEY,JSON.stringify([...s]));if(typeof likeCountCache[index]!=='number')likeCountCache[index]=0;likeCountCache[index]+=1;renderLikeButton(index,likeCountCache[index]);incrementSharedLike(index).then(function(count){if(typeof count==='number'){likeCountCache[index]=count;renderLikeButton(index,count);}}).catch(function(){});}
+function renderLikeButton(index,count){var btn=document.getElementById('articleLikeBtn');if(!btn)return;var liked=getLikedSet().has(index);var n=(typeof count==='number'&&isFinite(count))?count:(typeof likeCountCache[index]==='number'?likeCountCache[index]:(liked?1:0));n=Math.max(0,Math.round(n));btn.textContent='❤ '+n+' '+(n===1?'Like':'Likes');btn.classList.toggle('is-liked',liked);}
+async function fetchSharedLikeCount(index){if(typeof likeCountCache[index]==='number')return likeCountCache[index];if(likeCountPending[index])return likeCountPending[index];var p=(async function(){try{var controller=new AbortController();var t=setTimeout(function(){controller.abort();},1200);var res=await fetch(LIKE_API+'/get/'+LIKE_NAMESPACE+'/'+likeKey(index),{signal:controller.signal,cache:'no-store'});clearTimeout(t);if(!res.ok)return null;var data=await res.json();if(typeof data.value==='number'){likeCountCache[index]=data.value;return data.value;}}catch(e){}return null;})();likeCountPending[index]=p;var v=await p;delete likeCountPending[index];return v;}
+async function incrementSharedLike(index){var controller=new AbortController();var t=setTimeout(function(){controller.abort();},1200);var res=await fetch(LIKE_API+'/hit/'+LIKE_NAMESPACE+'/'+likeKey(index),{signal:controller.signal,cache:'no-store'});clearTimeout(t);if(!res.ok)return null;var data=await res.json();return typeof data.value==='number'?data.value:null;}
+async function updateLikeButton(index){renderLikeButton(index,likeCountCache[index]);var count=await fetchSharedLikeCount(index);if(typeof count==='number')renderLikeButton(index,count);}
 function showPage(){document.body.classList.remove('sidetray-open');var h=(window.location.hash||'').replace(/^#/,'');var isArticle=h&&h.startsWith('article-');if(!isArticle){document.body.classList.remove('article-open');window.scrollTo({top:0,behavior:'smooth'});}const page=getCurrentPage();document.querySelectorAll('.header-nav-link,.main-navigation .nav-link--collection a,.main-navigation .subnav a').forEach(function(l){l.classList.remove('is-active');if(l.getAttribute('data-page')===page||(page==='about'&&l.getAttribute('href')==='#about'))l.classList.add('is-active');});var catFolder=document.getElementById('sidetrayCategoriesFolder');var catToggle=document.getElementById('sidetrayCategoriesToggle');if(catFolder&&catToggle){var symbol=catToggle.querySelector('.folder-toggle-symbol');var isCategory=page&&page!=='home'&&page!=='about'&&SLUG_TO_CATEGORY[page];if(isCategory){catFolder.classList.add('subnav-open');catToggle.setAttribute('aria-expanded','true');if(symbol)symbol.textContent='–';}else{catFolder.classList.remove('subnav-open');catToggle.setAttribute('aria-expanded','false');if(symbol)symbol.textContent='+';}}var headerCat=document.getElementById('headerCategories');if(headerCat)headerCat.classList.remove('is-open');var headerCatBtn=document.getElementById('headerCategoriesToggle');if(headerCatBtn)headerCatBtn.setAttribute('aria-expanded','false');const aboutPage=document.getElementById('aboutPage');const blogPage=document.getElementById('blogPage');if(aboutPage&&blogPage){if(page==='about'){aboutPage.style.display='block';blogPage.style.display='none';}else{aboutPage.style.display='none';blogPage.style.display='block';visibleCount=page==='home'?INITIAL_HOME_POSTS:POSTS_PER_PAGE;var catFilter=page==='home'?null:SLUG_TO_CATEGORY[page];renderPosts(false,catFilter);}}else{renderPosts();}}
 function init(){var h=window.location.hash||'';if(!h||h==='#')history.replaceState(null,'',window.location.pathname+window.location.search+'#home');showPage();window.addEventListener('hashchange',showPage);const loadMore=document.getElementById('loadMore');if(loadMore)loadMore.addEventListener('click',e=>{e.preventDefault();visibleCount+=POSTS_PER_PAGE;const p=getCurrentPage();if(p==='about')return;renderPosts(true,p==='home'?null:SLUG_TO_CATEGORY[p]);});const navToggle=document.getElementById('navToggle');const navClose=document.getElementById('navClose');const navOverlay=document.getElementById('navOverlay');function openNav(){document.body.classList.add('sidetray-open');}function closeNav(){document.body.classList.remove('sidetray-open');}navToggle?.addEventListener('click',e=>{e.preventDefault();openNav();});navClose?.addEventListener('click',e=>{e.preventDefault();closeNav();});navOverlay?.addEventListener('click',closeNav);var sidetrayCatToggle=document.getElementById('sidetrayCategoriesToggle');var sidetrayCatFolder=document.getElementById('sidetrayCategoriesFolder');if(sidetrayCatToggle&&sidetrayCatFolder){sidetrayCatToggle.addEventListener('click',function(e){e.preventDefault();var open=sidetrayCatFolder.classList.toggle('subnav-open');sidetrayCatToggle.setAttribute('aria-expanded',open?'true':'false');var sym=sidetrayCatToggle.querySelector('.folder-toggle-symbol');if(sym)sym.textContent=open?'–':'+';});}var headerCatToggle=document.getElementById('headerCategoriesToggle');var headerCat=document.getElementById('headerCategories');if(headerCatToggle&&headerCat){headerCatToggle.addEventListener('click',function(e){e.preventDefault();var open=headerCat.classList.toggle('is-open');headerCatToggle.setAttribute('aria-expanded',open?'true':'false');});}document.addEventListener('click',function(e){if(!headerCat||!headerCat.classList.contains('is-open'))return;if(headerCat.contains(e.target))return;headerCat.classList.remove('is-open');if(headerCatToggle)headerCatToggle.setAttribute('aria-expanded','false');});document.getElementById('logoLink')?.addEventListener('click',e=>{e.preventDefault();if(document.body.classList.contains('article-open'))closeArticle();window.location.hash='home';showPage();});const searchToggle=document.getElementById('searchToggle');const searchPanel=document.getElementById('searchPanel');const searchClose=document.getElementById('searchClose');const searchInput=document.getElementById('searchInput');const searchResults=document.getElementById('searchResults');function filterPosts(query){const q=(query||'').trim().toLowerCase();if(!q)return postsData;return postsData.filter(post=>{const title=(post.title||'').toLowerCase();const excerpt=(post.excerpt||'').toLowerCase();const author=(post.author||'').toLowerCase();const categories=(post.categories||[]).join(' ').toLowerCase();return title.includes(q)||excerpt.includes(q)||author.includes(q)||categories.includes(q);});}function renderSearchResults(query){const filtered=filterPosts(query);if(!query.trim()){searchResults.innerHTML='';searchResults.classList.remove('search-results--has-query');return;}searchResults.classList.add('search-results--has-query');if(filtered.length===0){searchResults.innerHTML='<p class="search-no-results">No posts match your search.</p>';return;}searchResults.innerHTML=filtered.map((post,i)=>{const index=postsData.indexOf(post);const categoriesHtml=post.categories.filter(c=>c!=='Mentor Spotlight').map(cat=>`<a href="#" class="blog-category">${cat}</a>`).join('<span class="blog-meta-delimiter">, </span>');return `<article class="search-result-card entry entry--list" data-index="${index}"><a href="#" class="search-result-link card-link" data-index="${index}"><div class="search-result-content"><h3 class="search-result-title">${post.title}</h3><p class="search-result-meta">${post.author} · ${post.categories.filter(c=>c!=='Mentor Spotlight').join(', ')}</p>${post.excerpt?`<p class="search-result-excerpt">${post.excerpt}</p>`:''}</div></a></article>`;}).join('');searchResults.querySelectorAll('.card-link').forEach(link=>{link.addEventListener('click',e=>{e.preventDefault();openArticle(parseInt(link.dataset.index,10));document.body.classList.remove('search-open');searchPanel?.classList.remove('search-panel--open');searchToggle.style.display='';searchClose.style.display='none';searchInput.value='';searchResults.innerHTML='';});});}searchToggle?.addEventListener('click',e=>{e.preventDefault();document.body.classList.add('search-open');searchPanel?.classList.add('search-panel--open');searchToggle.style.display='none';searchClose.style.display='flex';searchInput.value='';searchResults.innerHTML='';searchInput?.focus();});searchClose?.addEventListener('click',e=>{e.preventDefault();document.body.classList.remove('search-open');searchPanel?.classList.remove('search-panel--open');searchToggle.style.display='';searchClose.style.display='none';searchInput.value='';searchResults.innerHTML='';});searchInput?.addEventListener('input',e=>renderSearchResults(e.target.value));searchInput?.addEventListener('keydown',e=>{if(e.key==='Escape')searchClose?.click();});searchPanel?.querySelector('form')?.addEventListener('submit',e=>e.preventDefault());document.getElementById('articlePrev')?.addEventListener('click',()=>{if(currentArticleIndex>0)openArticle(currentArticleIndex-1);});document.getElementById('articleNext')?.addEventListener('click',()=>{if(currentArticleIndex<postsData.length-1)openArticle(currentArticleIndex+1);});document.getElementById('articleLikeBtn')?.addEventListener('click',function(e){e.preventDefault();if(!document.body.classList.contains('article-open'))return;var idx=currentArticleIndex;var liked=!getLikedSet().has(idx);setLiked(idx,liked);updateLikeButton(idx);});const hash=window.location.hash;if(hash&&hash.startsWith('#article-')){const idx=parseInt(hash.replace('#article-',''),10);if(!isNaN(idx)&&idx>=0&&idx<postsData.length)openArticle(idx);}}
 document.addEventListener('DOMContentLoaded',init);
+</script>
+<script>
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let revealObserver = null;
+  let rafId = 0;
+
+  function setupRevealObserver() {
+    if (reduceMotion || revealObserver) return;
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  }
+
+  function refreshRevealTargets() {
+    if (reduceMotion) return;
+    setupRevealObserver();
+    document.querySelectorAll('.entry--list, #articleHeaderThumb, .related-posts-title').forEach((el) => {
+      if (!el.classList.contains('reveal-on-scroll')) el.classList.add('reveal-on-scroll');
+      revealObserver.observe(el);
+    });
+  }
+
+  function refreshInteractiveCards() {
+    document.querySelectorAll('.entry--list').forEach((card) => {
+      card.classList.add('card-interactive');
+    });
+  }
+
+  function updateScrollSpotlight() {
+    rafId = 0;
+    const cards = Array.from(document.querySelectorAll('.entry--list'));
+    if (!cards.length) return;
+
+    const viewportCenter = window.innerHeight * 0.5;
+    let best = null;
+    let bestDist = Infinity;
+
+    cards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      const visible = rect.bottom > 0 && rect.top < window.innerHeight;
+      card.classList.remove('card-spotlight');
+      if (!visible) return;
+      const center = rect.top + rect.height * 0.5;
+      const dist = Math.abs(center - viewportCenter);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = card;
+      }
+    });
+
+    if (best) best.classList.add('card-spotlight');
+  }
+
+  function scheduleSpotlight() {
+    if (reduceMotion) return;
+    if (!rafId) rafId = requestAnimationFrame(updateScrollSpotlight);
+  }
+
+  function setupMutationRefresh() {
+    ['blogList', 'relatedPosts'].forEach((id) => {
+      const node = document.getElementById(id);
+      if (!node) return;
+      const mo = new MutationObserver(() => {
+        refreshInteractiveCards();
+        refreshRevealTargets();
+        scheduleSpotlight();
+      });
+      mo.observe(node, { childList: true, subtree: true });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    refreshInteractiveCards();
+    refreshRevealTargets();
+    scheduleSpotlight();
+    setupMutationRefresh();
+    window.addEventListener('scroll', scheduleSpotlight, { passive: true });
+    window.addEventListener('resize', scheduleSpotlight);
+  });
+})();
 </script>
