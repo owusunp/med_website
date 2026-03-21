@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """
-Blog Post Editor - Add new posts to Squarespace page-html.html
-Run: python add_blog_post.py
-Double-click add_blog_post.py on Mac/Windows (if Python is installed)
+Blog Post Editor — adds a new "card" (blog post) to the site without hand-editing code.
+
+How to run:
+  python add_blog_post.py   (Windows: try "py add_blog_post.py" if "python" fails)
+  python3 add_blog_post.py  (some Mac/Linux setups)
+
+What it does: opens a form, then writes your answers into squarespace/Custom Code/page-html.html
+(see PAGE_HTML_PATH below). You still copy that file into Squarespace's Code block when publishing.
 """
 
 import tkinter as tk
@@ -12,10 +17,12 @@ import re
 import base64
 from html import escape as html_escape
 
-# Path to page-html.html (relative to this script)
+# This script lives next to the "squarespace" folder — keep them together.
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Single file that powers the blog cards + full articles; paste its contents into Squarespace (Code block, HTML).
 PAGE_HTML_PATH = os.path.join(SCRIPT_DIR, "squarespace", "Custom Code", "page-html.html")
 
+# Must match the category names / hash routes used on the site (which tab lists the card).
 CATEGORIES = ["The Nitty-Gritty", "Roadmap", "Admissions", "Resources", "Mentor Spotlight"]
 
 # Global for image upload (set in main)
@@ -52,8 +59,10 @@ IMAGE_URL_RE = re.compile(
 
 
 def plain_text_to_html(text):
-    """Convert plain text to HTML. Blank lines separate paragraphs.
-    Any line that is only an image URL becomes an <img> (works after text too)."""
+    """Turn the Article content box into HTML for the full post (shown after clicking a card).
+
+    Blank lines = new paragraphs. A line that is only an image URL becomes an embedded image.
+    If the box already starts with "<", we assume you pasted HTML and leave it unchanged."""
     text = text.strip()
     if not text:
         return ""
@@ -87,7 +96,12 @@ def plain_text_to_html(text):
 
 
 def add_post_to_file(data):
-    """Append new post and article body to page-html.html."""
+    """Write one new post into page-html.html in three places (non-programmer summary):
+
+    1) postsData  — metadata for the card grid (title, excerpt, image on the listing).
+    2) articleBodies — full article HTML when someone opens that post (#article-N).
+    3) authorBios — optional one-line bio for the author on the article page only.
+    """
     if not os.path.exists(PAGE_HTML_PATH):
         messagebox.showerror("Error", f"File not found:\n{PAGE_HTML_PATH}")
         return False
@@ -95,12 +109,11 @@ def add_post_to_file(data):
     with open(PAGE_HTML_PATH, "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Categories from checkboxes
     cats = data["categories"]
     if not cats:
         cats = ["The Nitty-Gritty"]
 
-    # Build post object string
+    # --- Card row: appears in postsData (home + category pages as a clickable card) ---
     cats_str = "[" + ", ".join(f'"{c}"' for c in cats) + "]"
     post_entry = (
         f'  {{ date: "{data["date"]}", month: "{data["month"]}", day: "{data["day"]}", '
@@ -111,10 +124,10 @@ def add_post_to_file(data):
         f'image: "{data["image"]}", aspectRatio: "{data["aspect_ratio"]}" }}'
     )
 
-    # Escape article body for template literal
+    # Full article text must be safe inside JavaScript backticks in page-html.html
     body_escaped = escape_js_template_literal(data["article_body"])
 
-    # Find next index - count postsData entries
+    # New posts get the next index (0, 1, 2, …) — links use #article-0, #article-1, etc.
     posts_match = re.search(r"const postsData = \[(.*?)\];", content, re.DOTALL)
     if not posts_match:
         messagebox.showerror("Error", "Could not find postsData in file.")
@@ -124,8 +137,8 @@ def add_post_to_file(data):
     post_count = len(re.findall(r"\{ date:", posts_content))
     next_index = post_count
 
-    # Do postsData first (later in file) so articleBodies positions don't shift
-    # 1. Add to postsData - insert before ];
+    # Insert order matters: update postsData first, then articleBodies (same index in both).
+    # 1. postsData: append one new { date, title, excerpt, image, ... } object
     posts_start = content.find("const postsData = [")
     posts_array_start = content.find("[", posts_start) + 1
     posts_array_end = content.find("];", posts_array_start)
@@ -133,7 +146,7 @@ def add_post_to_file(data):
     post_addition = f",\n  {post_entry}"
     content = content[:posts_array_end] + post_addition + content[posts_array_end:]
 
-    # 2. Add to articleBodies - find the closing }; of articleBodies block
+    # 2. articleBodies: full HTML for the article view (key = same index as above)
     article_bodies_start = content.find("const articleBodies = {")
     if article_bodies_start == -1:
         messagebox.showerror("Error", "Could not find articleBodies in file.")
@@ -160,7 +173,7 @@ def add_post_to_file(data):
     article_addition = f',\n  {next_index}: `{body_escaped}`'
     content = content[:insert_pos] + article_addition + content[insert_pos:]
 
-    # 3. Add author to authorBios if bio provided
+    # 3. Optional: authorBios — short bio shown on article page when author name matches
     if data.get("author_bio"):
         author_escaped = data["author"].replace('\\', '\\\\').replace('"', '\\"')
         bio_escaped = data["author_bio"].replace('\\', '\\\\').replace('"', '\\"')
@@ -181,13 +194,14 @@ def add_post_to_file(data):
 
 
 def submit():
+    """Called when you click "Submit — Add Post to Squarespace". Gathers the form, validates, then saves."""
     global uploaded_image_var
-    # Get selected categories from checkboxes
+    # Categories: checked boxes; if none, default category applies
     selected_cats = [cat for cat, var in category_vars.items() if var.get()]
     if not selected_cats:
         selected_cats = ["The Nitty-Gritty"]
 
-    # Image: use uploaded (data URL) or pasted URL
+    # Image: file upload becomes a long "data:..." URL embedded in the HTML; or use pasted https:// URL
     img = uploaded_image_var.get().strip() or image_var.get().strip()
     data = {
         "date": date_var.get().strip(),
@@ -203,7 +217,7 @@ def submit():
         "article_body": plain_text_to_html(article_body_text.get("1.0", tk.END).strip()),
     }
 
-    # Validate
+    # Required fields — you'll see a small popup if something is missing
     if not data["title"]:
         messagebox.showwarning("Missing field", "Please enter a title.")
         return
@@ -254,6 +268,7 @@ def choose_image_file():
 
 
 def main():
+    """Builds the form window: labels match what appears on the site (card vs full article)."""
     global root, date_var, month_var, day_var, title_var, author_var, author_bio_var
     global excerpt_text, image_var, image_label_var, uploaded_image_var
     global aspect_var, article_body_text, category_vars
@@ -264,7 +279,7 @@ def main():
     root.geometry("720x850")
     root.resizable(True, True)
 
-    # Scrollable container so Submit button is always reachable
+    # Scrollable window so short screens can still reach Submit at the bottom
     canvas = tk.Canvas(root, highlightthickness=0)
     scrollbar = ttk.Scrollbar(root, command=canvas.yview)
     scrollable = ttk.Frame(canvas)
@@ -313,7 +328,7 @@ def main():
 
     ttk.Label(main, text="Add New Blog Post", font=("", 16, "bold")).pack(pady=(0, 15))
 
-    # Date fields
+    # Date fields — shown on the card and in article chrome (month/day often power the date pill)
     date_frame = ttk.Frame(main)
     date_frame.pack(fill=tk.X, pady=5)
     ttk.Label(date_frame, text="Date (e.g. Mar 15):", width=20).pack(side=tk.LEFT, padx=(0, 10))
@@ -332,22 +347,22 @@ def main():
     day_var = tk.StringVar(value="15")
     ttk.Entry(day_frame, textvariable=day_var, width=40).pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-    # Title
+    # Title — main headline on card and article
     ttk.Label(main, text="Title:").pack(anchor=tk.W, pady=(10, 0))
     title_var = tk.StringVar()
     ttk.Entry(main, textvariable=title_var, width=80).pack(fill=tk.X, pady=2)
 
-    # Author
+    # Author — byline on card and article
     ttk.Label(main, text="Author:").pack(anchor=tk.W, pady=(10, 0))
     author_var = tk.StringVar(value="Candid Premed")
     ttk.Entry(main, textvariable=author_var, width=80).pack(fill=tk.X, pady=2)
 
-    # Author Bio (optional - for author card in article view)
+    # Author Bio — optional; article page only (not on the small card in the grid)
     ttk.Label(main, text="Author Bio (optional):").pack(anchor=tk.W, pady=(10, 0))
     author_bio_var = tk.StringVar()
     ttk.Entry(main, textvariable=author_bio_var, width=80).pack(fill=tk.X, pady=2)
 
-    # Categories (checkboxes)
+    # Categories — which section lists this post; can pick several
     ttk.Label(main, text="Categories (select one or more):").pack(anchor=tk.W, pady=(10, 0))
     cat_frame = ttk.Frame(main)
     cat_frame.pack(fill=tk.X, pady=2)
@@ -357,12 +372,12 @@ def main():
         cb = ttk.Checkbutton(cat_frame, text=cat, variable=v)
         cb.pack(side=tk.LEFT, padx=(0, 15))
 
-    # Excerpt
+    # Excerpt — short teaser on the card only
     ttk.Label(main, text="Excerpt (short preview):").pack(anchor=tk.W, pady=(10, 0))
     excerpt_text = scrolledtext.ScrolledText(main, height=3, width=80, wrap=tk.WORD)
     excerpt_text.pack(fill=tk.X, pady=2)
 
-    # Image - upload or URL
+    # Image — card thumbnail + article hero (upload OR URL, not both needed if one is set)
     ttk.Label(main, text="Image:").pack(anchor=tk.W, pady=(10, 0))
     img_frame = ttk.Frame(main)
     img_frame.pack(fill=tk.X, pady=2)
@@ -376,12 +391,12 @@ def main():
     image_var = tk.StringVar()
     ttk.Entry(main, textvariable=image_var, width=80).pack(fill=tk.X, pady=2)
 
-    # Aspect ratio
+    # Aspect ratio — height of image frame on card/article (CSS padding-bottom trick)
     ttk.Label(main, text="Aspect Ratio (default 82%):").pack(anchor=tk.W, pady=(10, 0))
     aspect_var = tk.StringVar(value="82%")
     ttk.Entry(main, textvariable=aspect_var, width=20).pack(fill=tk.X, pady=2)
 
-    # Article body - plain text, no code needed
+    # Article body — full post after click; plain text is fine (converted to HTML unless you paste HTML)
     ttk.Label(
         main,
         text="Article content (write normally — no code needed; blank lines = new paragraphs):",
@@ -395,7 +410,7 @@ def main():
         "Takeaway: Your key point or lesson learned.",
     )
 
-    # Submit button - prominent, always visible
+    # Submit — writes to PAGE_HTML_PATH; then copy that file into Squarespace
     submit_frame = ttk.Frame(main)
     submit_frame.pack(fill=tk.X, pady=25)
     submit_btn = tk.Button(
