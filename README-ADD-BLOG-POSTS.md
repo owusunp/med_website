@@ -109,6 +109,10 @@ Click the blue button **“Submit — Add Post to Squarespace”**.
 
 **What just happened:** The program **rewrote** `page-html.html` on your laptop—the copy in **squarespace → Custom Code**. You can open that file in Finder right after and see it is newer / larger. Nothing was uploaded to Squarespace or the internet by this step alone.
 
+**Do you need to save?** **No.** The helper saves the file for you—there is nothing to **Cmd + S** in the form window (it is not a document editor). You do **not** need to open `page-html.html` first just to “save” the new post.
+
+**Only if you already had `page-html.html` open** in TextEdit or another app before you ran the helper: that window may still show the **old** text until you **reload** or close and reopen the file. Do **not** press **Cmd + S** there on the old version, or you could wipe out the new post the script just wrote.
+
 - If everything works, you will see a **Success** message. It reminds you which file was updated and what to do next in Squarespace (see below).
 - The program will close after success. If you see an error, read the message—it often means the expected file was moved or renamed.
 
